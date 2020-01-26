@@ -1,88 +1,48 @@
-import React from 'react'
-import Head from 'next/head'
-import Nav from '../components/nav'
+import React from "react";
+import useSWR from "swr";
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+import Banner from "../components/home/Banner";
+import MainView from "../components/home/MainView";
+import Tags from "../components/home/Tags";
+import api from "../lib/api";
+import fetcher from "../lib/utils/fetcher";
+import { SERVER_BASE_URL, APP_NAME } from "../lib/utils/constant";
 
-    <Nav />
+const Home = ({ data: initialData }) => {
+  const [token, setToken] = React.useState("");
 
-    <div className="hero">
-      <h1 className="title">Welcome to Next.js!</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
+  React.useEffect(() => {
+    const user = window.localStorage.getItem(`user`);
 
-      <div className="row">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
+    if (!!user && user.token) {
+      setToken(user.token);
+    }
+  }, []);
+
+  const { data } = useSWR(`${SERVER_BASE_URL}/tags`, fetcher, { initialData });
+
+  return (
+    <div className="home-page">
+      <Banner token={token} appName={APP_NAME} />
+
+      <div className="container page">
+        <div className="row">
+          <MainView />
+          <div className="col-md-3">
+            <div className="sidebar">
+              <p>Popular Tags</p>
+              <Tags tags={data && data.tags} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  );
+};
 
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
-  </div>
-)
+Home.getInitialProps = async () => {
+  const { data } = await api.Tags.getAll();
+  return { data };
+};
 
-export default Home
+export default Home;
