@@ -5,34 +5,21 @@ import useSWR from "swr";
 import ArticleList from "./ArticleList";
 import fetcher from "../../lib/utils/fetcher";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import LoadingSpinner from "../common/LoadingSpinner";
 import ListErrors from "../common/ListErrors";
 import TabList from "./TabList";
+import useIsMounted from "../../lib/hooks/useIsMounted";
 
-const MainView = () => {
+const MainView = ({ articles: initialArticles }) => {
   const [page, setPage] = React.useState(0);
-  const router = useRouter();
-  const {
-    query: { tab, tag }
-  } = router;
+  const isMounted = useIsMounted();
 
-  const { data: articleData, error: articleError } = useSWR(
-    tab
-      ? `${SERVER_BASE_URL}/articles/${tab}`
-      : `${SERVER_BASE_URL}/articles?offset=${page}`,
+  const router = useRouter();
+  const { asPath } = router;
+
+  const { data: fetchedArticles, error: articleError } = useSWR(
+    `${SERVER_BASE_URL}/articles${asPath}`,
     fetcher
   );
-
-  if (!articleData) {
-    return (
-      <div className="col-md-9">
-        <div className="feed-toggle">
-          <ul className="nav nav-pills outline-active"></ul>
-        </div>
-        <LoadingSpinner />
-      </div>
-    );
-  }
 
   if (articleError) {
     return (
@@ -45,7 +32,8 @@ const MainView = () => {
     );
   }
 
-  const { articles } = articleData;
+  const articles =
+    (fetchedArticles && fetchedArticles.articles) || initialArticles;
   const totalPagesCount = articles.length;
 
   return (
@@ -54,8 +42,8 @@ const MainView = () => {
         <TabList />
       </div>
       <ArticleList
-        articles={articleData && articleData.articles}
-        loading={!articleData}
+        articles={articles}
+        loading={isMounted && !fetchedArticles}
         totalPagesCount={totalPagesCount}
         currentPage={page}
         onSetPage={setPage}

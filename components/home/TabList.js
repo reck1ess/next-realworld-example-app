@@ -1,34 +1,31 @@
 import React from "react";
+import useSWR from "swr";
 import { useRouter } from "next/router";
 
 import NavLink from "../common/NavLink";
 import CustomLink from "../common/CustomLink";
 import Maybe from "../common/Maybe";
-import useIsMounted from "../../lib/hooks/useIsMounted";
+import checkLogin from "../../lib/utils/checkLogin";
+import storage from "../../lib/utils/storage";
 
 const TabList = () => {
-  const isMounted = useIsMounted();
+  const { data: currentUser } = useSWR("user", storage);
+  const isLoggedIn = checkLogin(currentUser);
   const router = useRouter();
   const {
-    query: { tab, tag }
+    query: { tag }
   } = router;
 
-  const currentUser = isMounted && window.localStorage.getItem(`user`);
-
-  if (
-    !currentUser ||
-    (currentUser.constructor === Object &&
-      Object.entries(currentUser).length === 0)
-  ) {
+  if (!isLoggedIn) {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <NavLink href="?tab=all">Global Feed</NavLink>
+          <NavLink href="/">Global Feed</NavLink>
         </li>
 
         <Maybe test={!!tag}>
           <li className="nav-item">
-            <CustomLink href="/" className="nav-link active">
+            <CustomLink href={`/?tag=${tag}`} className="nav-link active">
               <i className="ion-pound" /> {tag}
             </CustomLink>
           </li>
@@ -40,16 +37,16 @@ const TabList = () => {
   return (
     <ul className="nav nav-pills outline-active">
       <li className="nav-item">
-        <NavLink href="?tab=feed">Your Feed</NavLink>
+        <NavLink href={`/?author=${currentUser.username}`}>Your Feed</NavLink>
       </li>
 
       <li className="nav-item">
-        <NavLink href="?tab=all">Global Feed</NavLink>
+        <NavLink href="/">Global Feed</NavLink>
       </li>
 
       <Maybe test={!!tag}>
         <li className="nav-item">
-          <CustomLink href="/" className="nav-link active">
+          <CustomLink href={`/?tag=${tag}`} className="nav-link active">
             <i className="ion-pound" /> {tag}
           </CustomLink>
         </li>

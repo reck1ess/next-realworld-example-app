@@ -5,11 +5,13 @@ import useSWR from "swr";
 import fetch from "isomorphic-unfetch";
 
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import checkLogin from "../../lib/utils/checkLogin";
+import storage from "../../lib/utils/storage";
 import CustomLink from "../common/CustomLink";
-import useIsMounted from "../../lib/hooks/useIsMounted";
 
 const ArticleActions = ({ article }) => {
-  const isMounted = useIsMounted();
+  const { data: currentUser } = useSWR("user", storage);
+  const isLoggedIn = checkLogin(currentUser);
   const router = useRouter();
   const {
     asPath,
@@ -17,8 +19,7 @@ const ArticleActions = ({ article }) => {
   } = router;
 
   const handleDelete = async () => {
-    const user = window.localStorage.getItem(`user`);
-    if (!user || Object.keys(user).length === 0) return;
+    if (!isLoggedIn) return;
 
     const { error } = await useSWR(`${SERVER_BASE_URL}/articles/${pid}`, url =>
       fetch(url, {
@@ -28,6 +29,7 @@ const ArticleActions = ({ article }) => {
         }
       })
     );
+
     if (error) {
       const {
         errors: { body: errorText }
@@ -39,10 +41,8 @@ const ArticleActions = ({ article }) => {
     Router.push(`/`);
   };
 
-  const currentUser = isMounted && window.localStorage.getItem(`user`);
-
   const canModify =
-    currentUser && currentUser.username === article.author.username;
+    isLoggedIn && currentUser.username === article.author.username;
 
   return !canModify ? (
     <span />

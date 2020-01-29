@@ -12,7 +12,7 @@ const Tags = ({ tags }) => {
         return (
           <CustomLink
             key={tag}
-            href={`/tab=tag&tag=${tag}`}
+            href={`/?tag=${tag}`}
             className="tag-default tag-pill"
           >
             {tag}

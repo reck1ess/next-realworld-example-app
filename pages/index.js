@@ -4,34 +4,35 @@ import useSWR from "swr";
 import Banner from "../components/home/Banner";
 import MainView from "../components/home/MainView";
 import Tags from "../components/home/Tags";
-import api from "../lib/api";
 import fetcher from "../lib/utils/fetcher";
-import { SERVER_BASE_URL, APP_NAME } from "../lib/utils/constant";
+import { SERVER_BASE_URL } from "../lib/utils/constant";
 
-const Home = ({ data: initialData }) => {
-  const [token, setToken] = React.useState("");
-
-  React.useEffect(() => {
-    const user = window.localStorage.getItem(`user`);
-
-    if (!!user && user.token) {
-      setToken(user.token);
+const Home = ({ articles: initialArticles, tags: initialTags }) => {
+  const { data: fetchedArticles } = useSWR(
+    `${SERVER_BASE_URL}/articles`,
+    fetcher,
+    {
+      initialArticles
     }
-  }, []);
+  );
+  const { data: fetchedTags } = useSWR(`${SERVER_BASE_URL}/tags`, fetcher, {
+    initialTags
+  });
 
-  const { data } = useSWR(`${SERVER_BASE_URL}/tags`, fetcher, { initialData });
+  const { articles } = fetchedArticles || initialArticles;
+  const { tags } = fetchedTags || initialTags;
 
   return (
     <div className="home-page">
-      <Banner token={token} appName={APP_NAME} />
+      <Banner />
 
       <div className="container page">
         <div className="row">
-          <MainView />
+          <MainView articles={articles} />
           <div className="col-md-3">
             <div className="sidebar">
               <p>Popular Tags</p>
-              <Tags tags={data && data.tags} />
+              <Tags tags={tags} />
             </div>
           </div>
         </div>
@@ -41,8 +42,9 @@ const Home = ({ data: initialData }) => {
 };
 
 Home.getInitialProps = async () => {
-  const { data } = await api.Tags.getAll();
-  return { data };
+  const articles = await fetcher(`${SERVER_BASE_URL}/articles`);
+  const tags = await fetcher(`${SERVER_BASE_URL}/tags`);
+  return { articles, tags };
 };
 
 export default Home;
