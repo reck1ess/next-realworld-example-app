@@ -1,5 +1,6 @@
 import Router from "next/router";
 import React from "react";
+import { mutate } from "swr";
 
 import ListErrors from "../components/common/ListErrors";
 import CustomLink from "../components/common/CustomLink";
@@ -23,8 +24,10 @@ const Login = () => {
     setLoading(false);
     setErrors(!ok ? data.errors : []);
 
-    if (data && data.user)
-      window.localStorage.setItem(`user`, data && JSON.stringify(data.user));
+    if (data && data.user) {
+      window.localStorage.setItem("user", JSON.stringify(data.user));
+      mutate("user", data.user);
+    }
 
     if (ok) {
       Router.push(`/`);

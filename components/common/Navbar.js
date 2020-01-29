@@ -1,16 +1,15 @@
 import React from "react";
+import useSWR from "swr";
 
 import CustomLink from "./CustomLink";
-import useIsMounted from "../../lib/hooks/useIsMounted";
+import storage from "../../lib/utils/storage";
 import Maybe from "./Maybe";
+import checkLogin from "../../lib/utils/checkLogin";
 
 const Navbar = () => {
-  const isMounted = useIsMounted();
-  const currentUser = isMounted && window.localStorage.getItem(`user`);
-  const isLoggedIn =
-    !!currentUser &&
-    currentUser.constructor === Object &&
-    Object.keys(currentUser).length !== 0;
+  const { data: currentUser } = useSWR("user", storage);
+
+  const isLoggedIn = checkLogin(currentUser);
 
   return (
     <nav className="navbar navbar-light">
@@ -32,7 +31,7 @@ const Navbar = () => {
               </CustomLink>
             </li>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/setting">
+              <CustomLink className="nav-link" href="/settings">
                 <i className="ion-gear-a" />
                 &nbsp;Settings
               </CustomLink>

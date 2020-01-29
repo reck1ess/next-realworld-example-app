@@ -1,15 +1,15 @@
 import React from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import fetch from "isomorphic-unfetch";
 
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import checkLogin from "../../lib/utils/checkLogin";
 import CustomLink from "../common/CustomLink";
-import useIsMounted from "../../lib/hooks/useIsMounted";
 import api from "../../lib/api";
+import storage from "../../lib/utils/storage";
 
 const CommentInput = () => {
-  const isMounted = useIsMounted();
+  const { data: currentUser } = useSWR("user", storage);
+  const isLoggedIn = checkLogin(currentUser);
   const router = useRouter();
   const {
     query: { pid }
@@ -34,13 +34,7 @@ const CommentInput = () => {
     }
   };
 
-  const currentUser = isMounted && window.localStorage.getItem(`user`);
-
-  if (
-    !currentUser ||
-    (currentUser.constructor === Object &&
-      Object.entries(currentUser).length === 0)
-  ) {
+  if (!isLoggedIn) {
     return (
       <p>
         <CustomLink href="/login">Sign in</CustomLink>
