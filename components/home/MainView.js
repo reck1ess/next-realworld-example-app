@@ -16,10 +16,13 @@ const MainView = ({ articles: initialArticles }) => {
   const router = useRouter();
   const { asPath, query } = router;
 
-  const { data: fetchedArticles, error: articleError } = useSWR(
+  const fetchURL =
     Object.keys(query).length === 0
       ? `${SERVER_BASE_URL}/articles?offset=${page}`
-      : `${SERVER_BASE_URL}/articles${asPath}&offset=${page}`,
+      : `${SERVER_BASE_URL}/articles${asPath}&offset=${page}`;
+
+  const { data: fetchedArticles, error: articleError } = useSWR(
+    fetchURL,
     fetcher
   );
 
