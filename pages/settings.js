@@ -1,9 +1,24 @@
 import React from "react";
 import Router from "next/router";
+import useSWR from "swr";
 
 import SettingsForm from "../components/profile/settingsForm";
+import checkLogin from "../lib/utils/checkLogin";
+import storage from "../lib/utils/storage";
 
-const Settings = () => {
+const Settings = ({ res }) => {
+  const { data: currentUser } = useSWR("user", storage);
+  const isLoggedIn = checkLogin(currentUser);
+
+  if (!isLoggedIn) {
+    if (res) {
+      res.writeHead(302, {
+        Location: "/"
+      });
+      res.end();
+    }
+    Router.push(`/`);
+  }
   const handleLogout = async e => {
     e.preventDefault();
     const user = window.localStorage.getItem(`user`);
@@ -30,6 +45,12 @@ const Settings = () => {
       </div>
     </div>
   );
+};
+
+Settings.getInitialProps = async ({ res }) => {
+  return {
+    res
+  };
 };
 
 export default Settings;
