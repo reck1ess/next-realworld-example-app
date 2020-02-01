@@ -2,7 +2,7 @@ import React from "react";
 import Router from "next/router";
 import useSWR from "swr";
 
-import SettingsForm from "../components/profile/settingsForm";
+import SettingsForm from "../components/profile/SettingsForm";
 import checkLogin from "../lib/utils/checkLogin";
 import storage from "../lib/utils/storage";
 
@@ -19,13 +19,10 @@ const Settings = ({ res }) => {
     }
     Router.push(`/`);
   }
+
   const handleLogout = async e => {
     e.preventDefault();
-    const user = window.localStorage.getItem(`user`);
-    if (!user || Object.keys(user).length === 0) return;
-
     window.localStorage.removeItem(`user`);
-
     Router.push(`/`);
   };
 
