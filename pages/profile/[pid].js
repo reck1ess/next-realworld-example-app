@@ -15,11 +15,16 @@ import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
 const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
   const [page, setPage] = React.useState(0);
+  const [isFollowing, setFollowing] = React.useState(false);
   const isMounted = useIsMounted();
   const router = useRouter();
   const {
     query: { pid, favorite }
   } = router;
+
+  React.useEffect(() => {
+    setFollowing(following);
+  }, []);
 
   /*
   Fetch remote data related with profile
@@ -38,25 +43,34 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
   const isUser = currentUser && username === currentUser.username;
 
   const handleFollow = async () => {
-    const { ok } = await fetch(`${SERVER_BASE_URL}/profiles/${pid}/follow`, {
+    const response = await fetch(`${SERVER_BASE_URL}/profiles/${pid}/follow`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${encodeURIComponent(currentUser.token)}`
       }
     });
+    const {
+      profile: { following }
+    } = await response.json();
+    setFollowing(following);
 
     trigger(`${SERVER_BASE_URL}/profiles/${pid}`);
   };
 
   const handleUnfollow = async () => {
-    const { ok } = await fetch(`${SERVER_BASE_URL}/profiles/${pid}/follow`, {
+    const response = await fetch(`${SERVER_BASE_URL}/profiles/${pid}/follow`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${encodeURIComponent(currentUser.token)}`
       }
     });
+    const {
+      profile: { following }
+    } = await response.json();
+
+    setFollowing(following);
 
     trigger(`${SERVER_BASE_URL}/profiles/${pid}`);
   };
@@ -107,7 +121,7 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
               <FollowUserButton
                 isUser={isUser}
                 username={username}
-                following={following}
+                following={isFollowing}
                 follow={handleFollow}
                 unfollow={handleUnfollow}
               />
