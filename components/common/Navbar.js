@@ -25,7 +25,7 @@ const Navbar = () => {
           </li>
           <Maybe test={isLoggedIn}>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/post">
+              <CustomLink className="nav-link" href="/editor">
                 <i className="ion-compose" />
                 &nbsp;New Post
               </CustomLink>
