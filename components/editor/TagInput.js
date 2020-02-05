@@ -1,9 +1,9 @@
 import React from "react";
 
 const TagInput = ({ tagList, addTag, removeTag }) => {
-  const [tags, setTags] = React.useState("");
+  const [tag, setTag] = React.useState("");
 
-  const changeTagInput = e => setTags(e.target.value);
+  const changeTagInput = e => setTag(e.target.value);
 
   const handleTagInputKeyDown = e => {
     switch (e.keyCode) {
@@ -19,19 +19,15 @@ const TagInput = ({ tagList, addTag, removeTag }) => {
   };
 
   const handleAddTag = () => {
-    if (!!tags) {
-      addTag(tags.trim());
-      setTags("");
+    if (!!tag) {
+      addTag(tag);
+      setTag("");
     }
   };
 
   const handleRemoveTag = tag => {
     removeTag(tag);
   };
-
-  console.log("====================================");
-  console.log("tagList: ", tagList);
-  console.log("====================================");
 
   return (
     <React.Fragment>
@@ -40,13 +36,25 @@ const TagInput = ({ tagList, addTag, removeTag }) => {
           className="form-control"
           type="text"
           placeholder="Enter tags"
-          value={tags}
+          value={tag}
           onChange={changeTagInput}
           onBlur={handleAddTag}
           onKeyDown={handleTagInputKeyDown}
         />
 
-        <div className="tag-list"></div>
+        <div className="tag-list">
+          {tagList.map((tag, index) => {
+            return (
+              <span className="tag-default tag-pill" key={index}>
+                <i
+                  className="ion-close-round"
+                  onClick={() => handleRemoveTag(tag)}
+                />
+                {tag}
+              </span>
+            );
+          })}
+        </div>
       </fieldset>
     </React.Fragment>
   );
