@@ -37,7 +37,10 @@ const Navbar = () => {
               </CustomLink>
             </li>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/profile">
+              <CustomLink
+                className="nav-link"
+                href={`/profile/${currentUser && currentUser.username}`}
+              >
                 {currentUser && currentUser.username}
               </CustomLink>
             </li>
