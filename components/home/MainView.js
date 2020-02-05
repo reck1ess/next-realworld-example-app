@@ -8,9 +8,10 @@ import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import ListErrors from "../common/ListErrors";
 import TabList from "./TabList";
 import useIsMounted from "../../lib/hooks/useIsMounted";
+import useSessionStorage from "../../lib/hooks/useSessionStorage";
 
 const MainView = ({ articles: initialArticles }) => {
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useSessionStorage("offset", 0);
   const isMounted = useIsMounted();
 
   const router = useRouter();
