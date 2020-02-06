@@ -25,7 +25,7 @@ const ArticleActions = ({ article }) => {
       fetch(url, {
         method: "DELETE",
         headers: {
-          Authorization: `Token ${currentUser.jwt}`
+          Authorization: `Token ${currentUser.token}`
         }
       })
     );
