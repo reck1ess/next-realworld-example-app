@@ -23,11 +23,7 @@ const ArticleList = ({
     <div>
       {articles &&
         articles.map(article => (
-          <ArticlePreview
-            key={article.slug}
-            article={article}
-            currentPage={currentPage}
-          />
+          <ArticlePreview key={article.slug} article={article} />
         ))}
 
       <Pagination
