@@ -5,17 +5,18 @@ import CustomLink from "./CustomLink";
 import storage from "../../lib/utils/storage";
 import Maybe from "./Maybe";
 import checkLogin from "../../lib/utils/checkLogin";
+import PageContext from "../../lib/context/PageContext";
 
 const Navbar = () => {
+  const { setPage } = React.useContext(PageContext);
   const { data: currentUser } = useSWR("user", storage);
-
   const isLoggedIn = checkLogin(currentUser);
 
   return (
     <nav className="navbar navbar-light">
       <div className="container">
         <CustomLink className="navbar-brand" href="/">
-          conduit
+          <span onClick={() => setPage(0)}>conduit</span>
         </CustomLink>
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
@@ -41,7 +42,9 @@ const Navbar = () => {
                 className="nav-link"
                 href={`/profile/${currentUser && currentUser.username}`}
               >
-                {currentUser && currentUser.username}
+                <span onClick={() => setPage(0)}>
+                  {currentUser && currentUser.username}
+                </span>
               </CustomLink>
             </li>
           </Maybe>

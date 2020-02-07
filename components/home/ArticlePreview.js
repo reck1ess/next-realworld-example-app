@@ -7,11 +7,14 @@ import CustomLink from "../common/CustomLink";
 import checkLogin from "../../lib/utils/checkLogin";
 import storage from "../../lib/utils/storage";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import PageContext from "../../lib/context/PageContext";
 
 const FAVORITED_CLASS = "btn btn-sm btn-primary";
 const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 
 const ArticlePreview = ({ article }) => {
+  const { setPage } = React.useContext(PageContext);
+
   const [preview, setPreview] = React.useState(article);
   const [hover, setHover] = React.useState(false);
   const [currentIndex, setCurrentIndex] = React.useState(-1);
@@ -64,7 +67,7 @@ const ArticlePreview = ({ article }) => {
             className="author"
             href={`/profile/${preview.author.username}`}
           >
-            {preview.author.username}
+            <span onClick={() => setPage(0)}>{preview.author.username}</span>
           </CustomLink>
           <span className="date">
             {new Date(preview.createdAt).toDateString()}
@@ -107,7 +110,15 @@ const ArticlePreview = ({ article }) => {
                       hover && currentIndex === index ? "#5cb85c" : "initial"
                   }}
                 >
-                  {tag}
+                  <span
+                    style={{
+                      color:
+                        hover && currentIndex === index ? "#5cb85c" : "inherit"
+                    }}
+                    onClick={() => setPage(0)}
+                  >
+                    {tag}
+                  </span>
                 </li>
               </Link>
             );

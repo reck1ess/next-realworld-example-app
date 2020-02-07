@@ -2,8 +2,11 @@ import React from "react";
 
 import CustomLink from "../common/CustomLink";
 import LoadingSpinner from "../common/LoadingSpinner";
+import PageContext from "../../lib/context/PageContext";
 
 const Tags = ({ tags }) => {
+  const { setPage } = React.useContext(PageContext);
+
   if (!tags) return <LoadingSpinner />;
 
   return (
@@ -15,7 +18,7 @@ const Tags = ({ tags }) => {
             href={`/?tag=${tag}`}
             className="tag-default tag-pill"
           >
-            {tag}
+            <span onClick={() => setPage(0)}>{tag}</span>
           </CustomLink>
         );
       })}
