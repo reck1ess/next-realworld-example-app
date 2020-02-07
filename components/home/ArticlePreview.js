@@ -1,12 +1,11 @@
 import Link from "next/link";
 import React from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR from "swr";
 import fetch from "isomorphic-unfetch";
 
 import CustomLink from "../common/CustomLink";
 import checkLogin from "../../lib/utils/checkLogin";
 import storage from "../../lib/utils/storage";
-import fetcher from "../../lib/utils/fetcher";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
 const FAVORITED_CLASS = "btn btn-sm btn-primary";
@@ -14,6 +13,8 @@ const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 
 const ArticlePreview = ({ article }) => {
   const [preview, setPreview] = React.useState(article);
+  const [hover, setHover] = React.useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(-1);
   const { data: currentUser } = useSWR("user", storage);
   const isLoggedIn = checkLogin(currentUser);
 
@@ -93,6 +94,18 @@ const ArticlePreview = ({ article }) => {
                 <li
                   className="tag-default tag-pill tag-outline"
                   onClick={e => e.stopPropagation()}
+                  onMouseOver={() => {
+                    setHover(true);
+                    setCurrentIndex(index);
+                  }}
+                  onMouseLeave={() => {
+                    setHover(false);
+                    setCurrentIndex(-1);
+                  }}
+                  style={{
+                    borderColor:
+                      hover && currentIndex === index ? "#5cb85c" : "initial"
+                  }}
                 >
                   {tag}
                 </li>
