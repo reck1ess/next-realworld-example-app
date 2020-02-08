@@ -40,7 +40,6 @@ const MainView = ({ articles: initialArticles }) => {
 
   const articles =
     (fetchedArticles && fetchedArticles.articles) || initialArticles;
-  const totalPagesCount = articles.length;
 
   return (
     <div className="col-md-9">
@@ -50,7 +49,6 @@ const MainView = ({ articles: initialArticles }) => {
       <ArticleList
         articles={articles}
         loading={isMounted && !fetchedArticles}
-        totalPagesCount={totalPagesCount}
         currentPage={page}
         onSetPage={setPage}
       />

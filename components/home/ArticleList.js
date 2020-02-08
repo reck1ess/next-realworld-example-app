@@ -4,13 +4,7 @@ import ArticlePreview from "./ArticlePreview";
 import Pagination from "./Pagination";
 import LoadingSpinner from "../common/LoadingSpinner";
 
-const ArticleList = ({
-  loading,
-  articles,
-  totalPagesCount,
-  currentPage,
-  onSetPage
-}) => {
+const ArticleList = ({ loading, articles, currentPage, onSetPage }) => {
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -26,11 +20,7 @@ const ArticleList = ({
           <ArticlePreview key={article.slug} article={article} />
         ))}
 
-      <Pagination
-        totalPagesCount={totalPagesCount}
-        currentPage={currentPage}
-        onSetPage={onSetPage}
-      />
+      <Pagination currentPage={currentPage} onSetPage={onSetPage} />
     </div>
   );
 };

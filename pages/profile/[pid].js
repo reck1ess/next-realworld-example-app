@@ -12,9 +12,13 @@ import ProfileTab from "../../components/profile/ProfileTab";
 import api from "../../lib/api";
 import useIsMounted from "../../lib/hooks/useIsMounted";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import PageContext from "../../lib/context/PageContext";
+import PageCountContext from "../../lib/context/PageCountContext";
 
 const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
-  const [page, setPage] = React.useState(0);
+  const { page, setPage } = React.useContext(PageContext);
+  const { pageCount, setPageCount } = React.useContext(PageCountContext);
+
   const [isFollowing, setFollowing] = React.useState(false);
   const isMounted = useIsMounted();
   const router = useRouter();
@@ -79,8 +83,8 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
   Fetch remote data related with articles
   */
   const fetchURL = !!favorite
-    ? `${SERVER_BASE_URL}/articles?favorited=${username}`
-    : `${SERVER_BASE_URL}/articles?author=${username}`;
+    ? `${SERVER_BASE_URL}/articles?favorited=${username}&offset=${page}`
+    : `${SERVER_BASE_URL}/articles?author=${username}&offset=${page}`;
 
   const { data: fetchedArticles, error: articleError } = useSWR(
     fetchURL,
@@ -101,8 +105,9 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
     );
   }
 
-  const { articles } = fetchedArticles || initialArticles;
-  const totalPagesCount = articles.length;
+  const { articles, articlesCount } = fetchedArticles || initialArticles;
+
+  React.useEffect(() => setPageCount(articlesCount), [articlesCount]);
 
   return (
     <div className="profile-page">
@@ -139,7 +144,6 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
             <ArticleList
               articles={articles}
               loading={isMounted && !fetchedArticles}
-              totalPagesCount={totalPagesCount}
               currentPage={page}
               onSetPage={setPage}
             />

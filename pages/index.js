@@ -6,6 +6,7 @@ import MainView from "../components/home/MainView";
 import Tags from "../components/home/Tags";
 import fetcher from "../lib/utils/fetcher";
 import { SERVER_BASE_URL } from "../lib/utils/constant";
+import PageCountContext from "../lib/context/PageCountContext";
 
 const Home = ({ articles: initialArticles, tags: initialTags }) => {
   const { data: fetchedArticles } = useSWR(
@@ -19,8 +20,11 @@ const Home = ({ articles: initialArticles, tags: initialTags }) => {
     initialTags
   });
 
-  const { articles } = fetchedArticles || initialArticles;
+  const { articles, articlesCount } = fetchedArticles || initialArticles;
   const { tags } = fetchedTags || initialTags;
+
+  const { setPageCount } = React.useContext(PageCountContext);
+  setPageCount(articlesCount);
 
   return (
     <div className="home-page">
@@ -28,7 +32,7 @@ const Home = ({ articles: initialArticles, tags: initialTags }) => {
 
       <div className="container page">
         <div className="row">
-          <MainView articles={articles} />
+          <MainView articles={articles} articlesCount={articlesCount} />
           <div className="col-md-3">
             <div className="sidebar">
               <p>Popular Tags</p>
