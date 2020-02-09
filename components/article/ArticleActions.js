@@ -1,4 +1,3 @@
-import { Toast } from "antd-mobile";
 import React from "react";
 import Router, { useRouter } from "next/router";
 import useSWR from "swr";
@@ -34,7 +33,6 @@ const ArticleActions = ({ article }) => {
       const {
         errors: { body: errorText }
       } = error;
-      Toast.info(`${errorText[0]}`, 1.5);
       Router.replace(asPath, asPath, { shallow: true });
     }
 

@@ -12,7 +12,6 @@ import CommentInput from "./CommentInput";
 const CommentList = () => {
   const router = useRouter();
   const {
-    asPath,
     query: { pid }
   } = router;
 

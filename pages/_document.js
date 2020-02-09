@@ -68,11 +68,6 @@ class MyDocument extends Document {
               *:focus {
                 outline: none;
               }
-              .am-toast > span {
-                max-width: 80%;
-                bottom: 70px;
-                position: absolute;
-              }
             `}
           </style>
         </Head>

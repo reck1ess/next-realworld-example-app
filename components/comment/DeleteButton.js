@@ -23,9 +23,6 @@ const DeleteButton = ({ commentId }) => {
           method: "DELETE"
         })
     );
-    if (error) {
-      Toast.info(`Fail to delete a comment...`);
-    }
   };
 
   return (

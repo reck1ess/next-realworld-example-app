@@ -1,4 +1,3 @@
-import classnames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -8,13 +7,7 @@ const NavLink = ({ href, children }) => {
 
   return (
     <Link href={href} passHref>
-      <a
-        className={classnames("nav-link", {
-          active: asPath === href
-        })}
-      >
-        {children}
-      </a>
+      <a className={`nav-link ${asPath === href && `active`}`}>{children}</a>
     </Link>
   );
 };
