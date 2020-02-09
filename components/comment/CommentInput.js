@@ -6,6 +6,7 @@ import checkLogin from "../../lib/utils/checkLogin";
 import CustomLink from "../common/CustomLink";
 import api from "../../lib/api";
 import storage from "../../lib/utils/storage";
+import { DEFAULT_PROFILE_IMAGE } from "../../lib/utils/constant";
 
 const CommentInput = () => {
   const { data: currentUser } = useSWR("user", storage);
@@ -28,10 +29,6 @@ const CommentInput = () => {
     const { ok, data } = await api.Comments.create(pid, content);
     setLoading(false);
     setContent("");
-
-    if (!ok) {
-      Toast.info(`Fail to create a comment...`);
-    }
   };
 
   if (!isLoggedIn) {
@@ -59,7 +56,7 @@ const CommentInput = () => {
       </div>
       <div className="card-footer">
         <img
-          src={currentUser.image}
+          src={currentUser.image || DEFAULT_PROFILE_IMAGE}
           className="comment-author-img"
           alt="Comment author's profile image"
         />

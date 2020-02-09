@@ -6,7 +6,10 @@ import fetch from "isomorphic-unfetch";
 import CustomLink from "../common/CustomLink";
 import checkLogin from "../../lib/utils/checkLogin";
 import storage from "../../lib/utils/storage";
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import {
+  SERVER_BASE_URL,
+  DEFAULT_PROFILE_IMAGE
+} from "../../lib/utils/constant";
 import PageContext from "../../lib/context/PageContext";
 
 const FAVORITED_CLASS = "btn btn-sm btn-primary";
@@ -59,7 +62,10 @@ const ArticlePreview = ({ article }) => {
     <div className="article-preview">
       <div className="article-meta">
         <CustomLink href={`/profile/${preview.author.username}`}>
-          <img src={preview.author.image} alt="" />
+          <img
+            src={preview.author.image || DEFAULT_PROFILE_IMAGE}
+            alt="author's profile image"
+          />
         </CustomLink>
 
         <div className="info">
