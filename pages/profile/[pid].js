@@ -144,8 +144,6 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
             <ArticleList
               articles={articles}
               loading={isMounted && !fetchedArticles}
-              currentPage={page}
-              onSetPage={setPage}
             />
           </div>
         </div>
