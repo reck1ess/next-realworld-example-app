@@ -5,6 +5,7 @@ import useSWR from "swr";
 import ArticlePreview from "./ArticlePreview";
 import fetcher from "../../lib/utils/fetcher";
 import ListErrors from "../common/ListErrors";
+import Maybe from "../common/Maybe";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Pagination from "../common/Pagination";
 import PageContext from "../../lib/context/PageContext";
@@ -16,18 +17,24 @@ import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
 const ArticleList = ({ initialArticles }) => {
   const { page, setPage } = React.useContext(PageContext);
   const { pageCount } = React.useContext(PageCountContext);
-
-  const isMounted = useIsMounted();
-
-  const router = useRouter();
-  const { asPath, query } = router;
-  const { vw } = useViewport();
   const lastIndex = Math.ceil(pageCount / 20);
 
-  const fetchURL =
-    Object.keys(query).length === 0
-      ? `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`
-      : `${SERVER_BASE_URL}/articles${asPath}&offset=${page * DEFAULT_LIMIT}`;
+  const isMounted = useIsMounted();
+  const { vw } = useViewport();
+
+  const router = useRouter();
+  const { asPath, pathname, query } = router;
+  const { favorite, pid } = query;
+
+  const fetchURL = pathname.startsWith(`/profile`)
+    ? !!favorite
+      ? `${SERVER_BASE_URL}/articles?favorited=${pid}&offset=${page *
+          DEFAULT_LIMIT}`
+      : `${SERVER_BASE_URL}/articles?author=${pid}&offset=${page *
+          DEFAULT_LIMIT}`
+    : Object.keys(query).length === 0
+    ? `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`
+    : `${SERVER_BASE_URL}/articles${asPath}&offset=${page * DEFAULT_LIMIT}`;
 
   const { data: fetchedArticles, error: articleError } = useSWR(
     fetchURL,
@@ -49,8 +56,7 @@ const ArticleList = ({ initialArticles }) => {
     return <LoadingSpinner />;
   }
 
-  const articles =
-    (fetchedArticles && fetchedArticles.articles) || initialArticles;
+  const { articles, articlesCount } = fetchedArticles || initialArticles;
 
   if (articles && articles.length === 0) {
     return <div className="article-preview">No articles are here... yet.</div>;
@@ -63,77 +69,79 @@ const ArticleList = ({ initialArticles }) => {
           <ArticlePreview key={article.slug} article={article} />
         ))}
 
-      <Pagination
-        total={pageCount}
-        limit={20}
-        pageCount={vw >= 768 ? 10 : 5}
-        currentPage={page}
-      >
-        {({ pages, currentPage, hasNextPage, hasPreviousPage }) => (
-          <React.Fragment>
-            <li
-              key={`first-button`}
-              className="page-item"
-              onClick={e => {
-                e.preventDefault();
-                setPage(0);
-              }}
-            >
-              <a className="page-link">{`<<`}</a>
-            </li>
-            {hasPreviousPage && (
+      <Maybe test={articlesCount && articlesCount > 20}>
+        <Pagination
+          total={pageCount}
+          limit={20}
+          pageCount={vw >= 768 ? 10 : 5}
+          currentPage={page}
+        >
+          {({ pages, currentPage, hasNextPage, hasPreviousPage }) => (
+            <React.Fragment>
               <li
-                key={`prev-button`}
+                key={`first-button`}
                 className="page-item"
                 onClick={e => {
                   e.preventDefault();
-                  setPage(page - 1);
+                  setPage(0);
                 }}
               >
-                <a className="page-link">{`<`}</a>
+                <a className="page-link">{`<<`}</a>
               </li>
-            )}
-            {pages.map(page => {
-              const isCurrent = page === currentPage;
-              const handleClick = e => {
-                e.preventDefault();
-                setPage(page);
-              };
-              return (
+              {hasPreviousPage && (
                 <li
-                  key={page.toString()}
-                  className={isCurrent ? "page-item active" : "page-item"}
-                  onClick={handleClick}
+                  key={`prev-button`}
+                  className="page-item"
+                  onClick={e => {
+                    e.preventDefault();
+                    setPage(page - 1);
+                  }}
                 >
-                  <a className="page-link">{page + 1}</a>
+                  <a className="page-link">{`<`}</a>
                 </li>
-              );
-            })}
-            {hasNextPage && (
+              )}
+              {pages.map(page => {
+                const isCurrent = page === currentPage;
+                const handleClick = e => {
+                  e.preventDefault();
+                  setPage(page);
+                };
+                return (
+                  <li
+                    key={page.toString()}
+                    className={isCurrent ? "page-item active" : "page-item"}
+                    onClick={handleClick}
+                  >
+                    <a className="page-link">{page + 1}</a>
+                  </li>
+                );
+              })}
+              {hasNextPage && (
+                <li
+                  key={`next-button`}
+                  className="page-item"
+                  onClick={e => {
+                    e.preventDefault();
+                    setPage(page + 1);
+                  }}
+                >
+                  <a className="page-link">{`>`}</a>
+                </li>
+              )}
               <li
-                key={`next-button`}
+                key={`last-button`}
                 className="page-item"
                 onClick={e => {
                   e.preventDefault();
-                  setPage(page + 1);
+                  setPage(lastIndex);
                 }}
               >
-                <a className="page-link">{`>`}</a>
+                <a className="page-link">{`>>`}</a>
               </li>
-            )}
-            <li
-              key={`last-button`}
-              className="page-item"
-              onClick={e => {
-                e.preventDefault();
-                setPage(lastIndex);
-              }}
-            >
-              <a className="page-link">{`>>`}</a>
-            </li>
-          </React.Fragment>
-        )}
-      </Pagination>
+            </React.Fragment>
+          )}
+        </Pagination>
+      </Maybe>
     </div>
   );
 };

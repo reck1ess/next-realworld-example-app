@@ -17,15 +17,11 @@ import fetcher from "../../lib/utils/fetcher";
 
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
-const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
-  const { page } = React.useContext(PageContext);
-  const { setPageCount } = React.useContext(PageCountContext);
-
+const Profile = ({ articles, profile: initialProfile }) => {
   const [isFollowing, setFollowing] = React.useState(false);
-  const isMounted = useIsMounted();
   const router = useRouter();
   const {
-    query: { pid, favorite }
+    query: { pid }
   } = router;
 
   React.useEffect(() => {
@@ -81,36 +77,6 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
     trigger(`${SERVER_BASE_URL}/profiles/${pid}`);
   };
 
-  /*
-  Fetch remote data related with articles
-  */
-  const fetchURL = !!favorite
-    ? `${SERVER_BASE_URL}/articles?favorited=${username}&offset=${page}`
-    : `${SERVER_BASE_URL}/articles?author=${username}&offset=${page}`;
-
-  const { data: fetchedArticles, error: articleError } = useSWR(
-    fetchURL,
-    fetcher,
-    {
-      initialArticles
-    }
-  );
-
-  if (articleError) {
-    return (
-      <div className="col-md-9">
-        <div className="feed-toggle">
-          <ul className="nav nav-pills outline-active"></ul>
-        </div>
-        <ListErrors errors={articleError} />
-      </div>
-    );
-  }
-
-  const { articles, articlesCount } = fetchedArticles || initialArticles;
-
-  React.useEffect(() => setPageCount(articlesCount), [articlesCount]);
-
   return (
     <div className="profile-page">
       <div className="user-info">
@@ -143,10 +109,7 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
             <div className="articles-toggle">
               <ProfileTab profile={profile} />
             </div>
-            <ArticleList
-              articles={articles}
-              loading={isMounted && !fetchedArticles}
-            />
+            <ArticleList initialArticles={articles} />
           </div>
         </div>
       </div>
