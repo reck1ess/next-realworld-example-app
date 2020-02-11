@@ -2,11 +2,11 @@ import React from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import checkLogin from "../../lib/utils/checkLogin";
 import CustomLink from "../common/CustomLink";
+import CustomImage from "../common/CustomImage";
 import api from "../../lib/api";
+import checkLogin from "../../lib/utils/checkLogin";
 import storage from "../../lib/utils/storage";
-import { DEFAULT_PROFILE_IMAGE } from "../../lib/utils/constant";
 
 const CommentInput = () => {
   const { data: currentUser } = useSWR("user", storage);
@@ -55,9 +55,9 @@ const CommentInput = () => {
         />
       </div>
       <div className="card-footer">
-        <img
-          src={currentUser.image || DEFAULT_PROFILE_IMAGE}
+        <CustomImage
           className="comment-author-img"
+          src={currentUser.image}
           alt="Comment author's profile image"
         />
         <button className="btn btn-sm btn-primary" type="submit">

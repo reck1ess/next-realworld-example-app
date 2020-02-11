@@ -1,7 +1,8 @@
 import React from "react";
 
-import CustomLink from "../common/CustomLink";
 import ArticleActions from "./ArticleActions";
+import CustomLink from "../common/CustomLink";
+import CustomImage from "../common/CustomImage";
 
 const ArticleMeta = ({ article }) => {
   if (!article) return;
@@ -9,7 +10,7 @@ const ArticleMeta = ({ article }) => {
   return (
     <div className="article-meta">
       <CustomLink href={`/@${article.author.username}`}>
-        <img src={article.author.image} alt="author-profile-image" />
+        <CustomImage src={article.author.image} alt="author-profile-image" />
       </CustomLink>
 
       <div className="info">

@@ -2,6 +2,7 @@ import React from "react";
 import useSWR from "swr";
 
 import CustomLink from "../common/CustomLink";
+import CustomImage from "../common/CustomImage";
 import Maybe from "../common/Maybe";
 import DeleteButton from "./DeleteButton";
 import checkLogin from "../../lib/utils/checkLogin";
@@ -23,10 +24,10 @@ const Comment = ({ comment }) => {
           href={`/@${comment.author.username}`}
           className="comment-author"
         >
-          <img
+          <CustomImage
             src={comment.author.image}
-            className="comment-author-img"
             alt="Comment author's profile image"
+            className="comment-author-img"
           />
         </CustomLink>
         &nbsp;

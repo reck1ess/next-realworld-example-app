@@ -1,23 +1,25 @@
 import React from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR, { trigger } from "swr";
 import { useRouter } from "next/router";
 
-import storage from "../../lib/utils/storage";
-import ArticleList from "../../components/home/ArticleList";
+import CustomImage from "../../components/common/CustomImage";
 import RedError from "../../components/common/RedError";
+import ArticleList from "../../components/home/ArticleList";
 import EditProfileButton from "../../components/profile/EditProfileButton";
 import FollowUserButton from "../../components/profile/FollowUserButton";
-import fetcher from "../../lib/utils/fetcher";
 import ProfileTab from "../../components/profile/ProfileTab";
 import api from "../../lib/api";
-import useIsMounted from "../../lib/hooks/useIsMounted";
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import PageContext from "../../lib/context/PageContext";
 import PageCountContext from "../../lib/context/PageCountContext";
+import useIsMounted from "../../lib/hooks/useIsMounted";
+import storage from "../../lib/utils/storage";
+import fetcher from "../../lib/utils/fetcher";
+
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
 const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
-  const { page, setPage } = React.useContext(PageContext);
-  const { pageCount, setPageCount } = React.useContext(PageCountContext);
+  const { page } = React.useContext(PageContext);
+  const { setPageCount } = React.useContext(PageCountContext);
 
   const [isFollowing, setFollowing] = React.useState(false);
   const isMounted = useIsMounted();
@@ -115,10 +117,10 @@ const Profile = ({ profile: initialProfile, articles: initialArticles }) => {
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-md-10 offset-md-1">
-              <img
+              <CustomImage
                 src={image}
-                className="user-img"
                 alt="User's profile image"
+                className="user-img"
               />
               <h4>{username}</h4>
               <p>{bio}</p>
