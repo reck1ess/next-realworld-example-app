@@ -68,6 +68,13 @@ class MyDocument extends Document {
               *:focus {
                 outline: none;
               }
+              .row {
+                width: 100%;
+                margin: 0;
+              }
+              .col-md-9 {
+                width: 100%;
+              }
             `}
           </style>
         </Head>
