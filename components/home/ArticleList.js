@@ -1,25 +1,60 @@
 import React from "react";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 import ArticlePreview from "./ArticlePreview";
-import Pagination from "../common/Pagination";
+import fetcher from "../../lib/utils/fetcher";
+import ListErrors from "../common/ListErrors";
 import LoadingSpinner from "../common/LoadingSpinner";
-import PageCountContext from "../../lib/context/PageCountContext";
+import Pagination from "../common/Pagination";
 import PageContext from "../../lib/context/PageContext";
+import PageCountContext from "../../lib/context/PageCountContext";
+import useIsMounted from "../../lib/hooks/useIsMounted";
 import useViewport from "../../lib/hooks/useViewport";
+import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
 
-const ArticleList = ({ loading, articles }) => {
-  if (loading) {
+const ArticleList = ({ initialArticles }) => {
+  const { page, setPage } = React.useContext(PageContext);
+  const { pageCount } = React.useContext(PageCountContext);
+
+  const isMounted = useIsMounted();
+
+  const router = useRouter();
+  const { asPath, query } = router;
+  const { vw } = useViewport();
+  const lastIndex = Math.ceil(pageCount / 20);
+
+  const fetchURL =
+    Object.keys(query).length === 0
+      ? `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`
+      : `${SERVER_BASE_URL}/articles${asPath}&offset=${page * DEFAULT_LIMIT}`;
+
+  const { data: fetchedArticles, error: articleError } = useSWR(
+    fetchURL,
+    fetcher
+  );
+
+  if (articleError) {
+    return (
+      <div className="col-md-9">
+        <div className="feed-toggle">
+          <ul className="nav nav-pills outline-active"></ul>
+        </div>
+        <ListErrors errors={articleError} />
+      </div>
+    );
+  }
+
+  if (isMounted && !fetchedArticles) {
     return <LoadingSpinner />;
   }
+
+  const articles =
+    (fetchedArticles && fetchedArticles.articles) || initialArticles;
 
   if (articles && articles.length === 0) {
     return <div className="article-preview">No articles are here... yet.</div>;
   }
-
-  const { page, setPage } = React.useContext(PageContext);
-  const { pageCount } = React.useContext(PageCountContext);
-  const { vw } = useViewport();
-  const lastIndex = Math.ceil(pageCount / 20);
 
   return (
     <div>

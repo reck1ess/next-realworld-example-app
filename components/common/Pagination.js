@@ -3,12 +3,6 @@ import React from "react";
 import { getRange, getPageInfo } from "../../lib/utils/calculatePagination";
 
 const Pagination = ({ children, total, limit, pageCount, currentPage }) => {
-  const [page, setPage] = React.useState(0);
-
-  if (currentPage && page !== currentPage) {
-    setPage(currentPage);
-  }
-
   const {
     firstPage,
     lastPage,
