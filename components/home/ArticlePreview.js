@@ -57,7 +57,7 @@ const ArticlePreview = ({ article }) => {
   if (!article) return;
 
   return (
-    <div className="article-preview">
+    <div className="article-preview" style={{ padding: "1.5rem 0.5rem" }}>
       <div className="article-meta">
         <CustomLink href={`/profile/${preview.author.username}`}>
           <CustomImage
@@ -94,7 +94,7 @@ const ArticlePreview = ({ article }) => {
         <h1>{preview.title}</h1>
         <p>{preview.description}</p>
         <span>Read more...</span>
-        <ul className="tag-list">
+        <ul className="tag-list" style={{ maxWidth: "100%" }}>
           {preview.tagList.map((tag, index) => {
             return (
               <Link href={`/?tag=${tag}`} key={index}>

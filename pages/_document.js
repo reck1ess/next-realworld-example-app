@@ -72,8 +72,13 @@ class MyDocument extends Document {
                 width: 100%;
                 margin: 0;
               }
-              .col-md-9 {
-                width: 100%;
+              @media screen and (max-width: 360px) {
+                .navbar {
+                  padding: 0;
+                }
+                .nav {
+                  font-size: 15px;
+                }
               }
             `}
           </style>
