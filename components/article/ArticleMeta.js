@@ -9,12 +9,17 @@ const ArticleMeta = ({ article }) => {
 
   return (
     <div className="article-meta">
-      <CustomLink href={`/@${article.author.username}`}>
+      <CustomLink
+        href={`/profile/${encodeURIComponent(article.author.username)}`}
+      >
         <CustomImage src={article.author.image} alt="author-profile-image" />
       </CustomLink>
 
       <div className="info">
-        <CustomLink href={`/@${article.author.username}`} className="author">
+        <CustomLink
+          href={`/profile/${encodeURIComponent(article.author.username)}`}
+          className="author"
+        >
           {article.author.username}
         </CustomLink>
         <span className="date">
