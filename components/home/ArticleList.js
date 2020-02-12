@@ -23,18 +23,20 @@ const ArticleList = ({ initialArticles }) => {
   const { vw } = useViewport();
 
   const router = useRouter();
-  const { asPath, pathname, query } = router;
+  const { pathname, query } = router;
   const { favorite, pid } = query;
 
   const fetchURL = pathname.startsWith(`/profile`)
     ? !!favorite
-      ? `${SERVER_BASE_URL}/articles?favorited=${pid}&offset=${page *
-          DEFAULT_LIMIT}`
-      : `${SERVER_BASE_URL}/articles?author=${pid}&offset=${page *
-          DEFAULT_LIMIT}`
+      ? `${SERVER_BASE_URL}/articles?favorited=${encodeURIComponent(
+          pid
+        )}&offset=${page * DEFAULT_LIMIT}`
+      : `${SERVER_BASE_URL}/articles?author=${encodeURIComponent(
+          pid
+        )}&offset=${page * DEFAULT_LIMIT}`
     : Object.keys(query).length === 0
     ? `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`
-    : `${SERVER_BASE_URL}/articles${asPath}&offset=${page * DEFAULT_LIMIT}`;
+    : `${SERVER_BASE_URL}/articles/feed?offset=${page * DEFAULT_LIMIT}`;
 
   const { data: fetchedArticles, error: articleError } = useSWR(
     fetchURL,
