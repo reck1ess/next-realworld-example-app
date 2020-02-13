@@ -20,7 +20,11 @@ const Article = ({ data: initialData }) => {
   const {
     data: articleData,
     error: articleError
-  } = useSWR(`${SERVER_BASE_URL}/articles/${pid}`, fetcher, { initialData });
+  } = useSWR(
+    `${SERVER_BASE_URL}/articles/${encodeURIComponent(pid)}`,
+    fetcher,
+    { initialData }
+  );
 
   if (!articleData) {
     return <LoadingSpinner />;

@@ -1,12 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { trigger } from "swr";
 
 import CustomLink from "../common/CustomLink";
 import CustomImage from "../common/CustomImage";
-import api from "../../lib/api";
 import checkLogin from "../../lib/utils/checkLogin";
 import storage from "../../lib/utils/storage";
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
 const CommentInput = () => {
   const { data: currentUser } = useSWR("user", storage);
@@ -26,9 +26,24 @@ const CommentInput = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
-    const { ok, data } = await api.Comments.create(pid, content);
+    await fetch(
+      `${SERVER_BASE_URL}/articles/${encodeURIComponent(pid)}/comments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${encodeURIComponent(currentUser.token)}`
+        },
+        body: JSON.stringify({
+          comment: {
+            body: content
+          }
+        })
+      }
+    );
     setLoading(false);
     setContent("");
+    trigger(`${SERVER_BASE_URL}/articles/${pid}/comments`);
   };
 
   if (!isLoggedIn) {
