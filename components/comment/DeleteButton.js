@@ -1,28 +1,25 @@
 import { useRouter } from "next/router";
-import useSWR from "swr";
-import marked from "marked";
+import useSWR, { trigger } from "swr";
 import fetch from "isomorphic-unfetch";
 
-import ArticleMeta from "../../components/article/ArticleMeta";
-import RedError from "../../components/common/RedError";
-import fetcher from "../../lib/utils/fetcher";
+import storage from "../../lib/utils/storage";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const DeleteButton = ({ commentId }) => {
+  const { data: currentUser } = useSWR("user", storage);
   const router = useRouter();
   const {
     query: { pid }
   } = router;
 
   const handleDelete = async commentId => {
-    const { error } = useSWR(
-      `${SERVER_BASE_URL}/articles/${pid}/comments/${commentId}`,
-      url =>
-        fetch(url, {
-          method: "DELETE"
-        })
-    );
+    await fetch(`${SERVER_BASE_URL}/articles/${pid}/comments/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${currentUser.token}`
+      }
+    });
+    trigger(`${SERVER_BASE_URL}/articles/${pid}/comments`);
   };
 
   return (
