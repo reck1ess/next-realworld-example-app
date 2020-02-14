@@ -1,6 +1,6 @@
 import React from "react";
 import Router, { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { trigger } from "swr";
 import fetch from "isomorphic-unfetch";
 
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
@@ -20,22 +20,13 @@ const ArticleActions = ({ article }) => {
   const handleDelete = async () => {
     if (!isLoggedIn) return;
 
-    const { error } = await useSWR(`${SERVER_BASE_URL}/articles/${pid}`, url =>
-      fetch(url, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Token ${currentUser.token}`
-        }
-      })
-    );
-
-    if (error) {
-      const {
-        errors: { body: errorText }
-      } = error;
-      Router.replace(asPath, asPath, { shallow: true });
-    }
-
+    await fetch(`${SERVER_BASE_URL}/articles/${pid}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${currentUser.token}`
+      }
+    });
+    trigger(`${SERVER_BASE_URL}/articles/${pid}`);
     Router.push(`/`);
   };
 
