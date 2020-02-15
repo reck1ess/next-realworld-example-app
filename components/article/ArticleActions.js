@@ -13,7 +13,6 @@ const ArticleActions = ({ article }) => {
   const isLoggedIn = checkLogin(currentUser);
   const router = useRouter();
   const {
-    asPath,
     query: { pid }
   } = router;
 
