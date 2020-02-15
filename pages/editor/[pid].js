@@ -1,56 +1,31 @@
-import Router from "next/router";
+import fetch from "isomorphic-unfetch";
+import Router, { useRouter } from "next/router";
 import React from "react";
 import useSWR from "swr";
 
-import ListErrors from "../components/common/ListErrors";
-import TagInput from "../components/editor/TagInput";
-import api from "../lib/api";
-import storage from "../lib/utils/storage";
+import ListErrors from "../../components/common/ListErrors";
+import TagInput from "../../components/editor/TagInput";
+import api from "../../lib/api";
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import editorReducer from "../../lib/utils/editorReducer";
+import storage from "../../lib/utils/storage";
 
-const initialState = {
-  title: "",
-  description: "",
-  body: "",
-  tagList: []
-};
+const UpdateArticleEditor = ({ articles: initialArticles }) => {
+  const initialState = {
+    title: initialArticles.article.title,
+    description: initialArticles.article.description,
+    body: initialArticles.article.body,
+    tagList: initialArticles.article.tagList
+  };
 
-const editorReducer = (state, action) => {
-  switch (action.type) {
-    case "SET_TITLE":
-      return {
-        ...state,
-        title: action.text
-      };
-    case "SET_DESCRIPTION":
-      return {
-        ...state,
-        description: action.text
-      };
-    case "SET_BODY":
-      return {
-        ...state,
-        body: action.text
-      };
-    case "ADD_TAG":
-      return {
-        ...state,
-        tagList: state.tagList.concat(action.tag)
-      };
-    case "REMOVE_TAG":
-      return {
-        ...state,
-        tagList: state.tagList.filter(tag => tag !== action.tag)
-      };
-    default:
-      throw new Error("Unhandled action");
-  }
-};
-
-const Editor = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
   const [posting, dispatch] = React.useReducer(editorReducer, initialState);
   const { data: currentUser } = useSWR("user", storage);
+  const router = useRouter();
+  const {
+    query: { pid }
+  } = router;
 
   const handleTitle = e =>
     dispatch({ type: "SET_TITLE", text: e.target.value });
@@ -64,7 +39,14 @@ const Editor = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { ok, data } = await api.Articles.create(posting, currentUser.token);
+    const { ok, data } = await fetch(`${SERVER_BASE_URL}/articles/${pid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${encodeURIComponent(currentUser.token)}`
+      },
+      body: JSON.stringify({ article: posting })
+    });
 
     setLoading(false);
     setErrors(!ok ? data.errors : []);
@@ -125,7 +107,7 @@ const Editor = () => {
                   disabled={isLoading}
                   onClick={handleSubmit}
                 >
-                  Publish Article
+                  Update Article
                 </button>
               </fieldset>
             </form>
@@ -136,4 +118,9 @@ const Editor = () => {
   );
 };
 
-export default Editor;
+UpdateArticleEditor.getInitialProps = async ({ query: { pid } }) => {
+  const articles = await api.Articles.get(pid);
+  return { articles };
+};
+
+export default UpdateArticleEditor;
