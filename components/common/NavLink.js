@@ -7,7 +7,12 @@ const NavLink = ({ href, children }) => {
 
   return (
     <Link href={href} passHref>
-      <a className={`nav-link ${asPath === href && `active`}`}>{children}</a>
+      <a
+        className={`nav-link ${encodeURIComponent(asPath) ===
+          encodeURIComponent(href) && `active`}`}
+      >
+        {children}
+      </a>
     </Link>
   );
 };

@@ -8,12 +8,16 @@ const ProfileTab = ({ profile }) => {
   return (
     <ul className="nav nav-pills outline-active">
       <li className="nav-item">
-        <NavLink href={`/profile/${profile.username}`}>
+        <NavLink href={`/profile/${encodeURIComponent(profile.username)}`}>
           <span onClick={() => setPage(0)}>My Articles</span>
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink href={`/profile/${profile.username}?favorite=true`}>
+        <NavLink
+          href={`/profile/${encodeURIComponent(
+            profile.username
+          )}?favorite=true`}
+        >
           <span onClick={() => setPage(0)}>Favorited Articles</span>
         </NavLink>
       </li>
