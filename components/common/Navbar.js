@@ -6,6 +6,7 @@ import storage from "../../lib/utils/storage";
 import Maybe from "./Maybe";
 import checkLogin from "../../lib/utils/checkLogin";
 import PageContext from "../../lib/context/PageContext";
+import NavLink from "./NavLink";
 
 const Navbar = () => {
   const { setPage } = React.useContext(PageContext);
@@ -20,44 +21,37 @@ const Navbar = () => {
         </CustomLink>
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
-            <CustomLink className="nav-link active" href="/">
-              Home
-            </CustomLink>
+            <NavLink href="/">
+              <span onClick={() => setPage(0)}>Home</span>
+            </NavLink>
           </li>
           <Maybe test={isLoggedIn}>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/editor">
+              <NavLink href="/editor/new">
                 <i className="ion-compose" />
                 &nbsp;New Post
-              </CustomLink>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/settings">
+              <NavLink href="/user/settings">
                 <i className="ion-gear-a" />
                 &nbsp;Settings
-              </CustomLink>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <CustomLink
-                className="nav-link"
-                href={`/profile/${currentUser && currentUser.username}`}
-              >
+              <NavLink href={`/profile/${currentUser && currentUser.username}`}>
                 <span onClick={() => setPage(0)}>
                   {currentUser && currentUser.username}
                 </span>
-              </CustomLink>
+              </NavLink>
             </li>
           </Maybe>
           <Maybe test={!isLoggedIn}>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/login">
-                Sign in
-              </CustomLink>
+              <NavLink href="/user/login">Sign in</NavLink>
             </li>
             <li className="nav-item">
-              <CustomLink className="nav-link" href="/register">
-                Sign up
-              </CustomLink>
+              <NavLink href="/user/register">Sign up</NavLink>
             </li>
           </Maybe>
         </ul>
