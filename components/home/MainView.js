@@ -1,6 +1,6 @@
 import React from "react";
 
-import ArticleList from "./ArticleList";
+import ArticleList from "../article/ArticleList";
 import TabList from "./TabList";
 
 const MainView = ({ articles }) => {

@@ -49,9 +49,9 @@ const CommentInput = () => {
   if (!isLoggedIn) {
     return (
       <p>
-        <CustomLink href="/login">Sign in</CustomLink>
+        <CustomLink href="/user/login">Sign in</CustomLink>
         &nbsp;or&nbsp;
-        <CustomLink href="/register">sign up</CustomLink>
+        <CustomLink href="/user/register">sign up</CustomLink>
         &nbsp;to add comments on this article.
       </p>
     );

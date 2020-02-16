@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import CustomImage from "../../components/common/CustomImage";
 import RedError from "../../components/common/RedError";
-import ArticleList from "../../components/home/ArticleList";
+import ArticleList from "../../components/article/ArticleList";
 import EditProfileButton from "../../components/profile/EditProfileButton";
 import FollowUserButton from "../../components/profile/FollowUserButton";
 import ProfileTab from "../../components/profile/ProfileTab";

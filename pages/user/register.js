@@ -6,12 +6,14 @@ import ListErrors from "../components/common/ListErrors";
 import CustomLink from "../components/common/CustomLink";
 import api from "../lib/api";
 
-const Login = () => {
+const Register = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const handleUsernameChange = e => setUsername(e.target.value);
   const handleEmailChange = e => setEmail(e.target.value);
   const handlePasswordChange = e => setPassword(e.target.value);
 
@@ -19,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { ok, data } = await api.Auth.login(email, password);
+    const { ok, data } = await api.Auth.register(username, email, password);
 
     setLoading(false);
     setErrors(!ok ? data.errors : []);
@@ -39,15 +41,25 @@ const Login = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">
-            <h1 className="text-xs-center">Sign in</h1>
+            <h1 className="text-xs-center">Sign Up</h1>
             <p className="text-xs-center">
-              <CustomLink href="/register">Need an account?</CustomLink>
+              <CustomLink href="/user/login">Have an account?</CustomLink>
             </p>
 
             <ListErrors errors={errors} />
 
             <form onSubmit={handleSubmit}>
               <fieldset>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={handleUsernameChange}
+                  />
+                </fieldset>
+
                 <fieldset className="form-group">
                   <input
                     className="form-control form-control-lg"
@@ -73,7 +85,7 @@ const Login = () => {
                   type="submit"
                   disabled={isLoading}
                 >
-                  Sign in
+                  Sign up
                 </button>
               </fieldset>
             </form>
@@ -84,4 +96,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

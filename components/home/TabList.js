@@ -37,7 +37,7 @@ const TabList = () => {
   return (
     <ul className="nav nav-pills outline-active">
       <li className="nav-item">
-        <NavLink href={`/?author=${currentUser.username}`}>Your Feed</NavLink>
+        <NavLink href={`/?favorite=${currentUser.username}`}>Your Feed</NavLink>
       </li>
 
       <li className="nav-item">

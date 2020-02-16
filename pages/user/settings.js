@@ -2,9 +2,9 @@ import React from "react";
 import Router from "next/router";
 import useSWR from "swr";
 
-import SettingsForm from "../components/profile/SettingsForm";
-import checkLogin from "../lib/utils/checkLogin";
-import storage from "../lib/utils/storage";
+import SettingsForm from "../../components/profile/SettingsForm";
+import checkLogin from "../../lib/utils/checkLogin";
+import storage from "../../lib/utils/storage";
 
 const Settings = ({ res }) => {
   const { data: currentUser } = useSWR("user", storage);
