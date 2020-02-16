@@ -1,13 +1,14 @@
-import React from "react";
 import { useRouter } from "next/router";
+import React from "react";
 import useSWR from "swr";
 
-import RedError from "../../components/common/RedError";
-import fetcher from "../../lib/utils/fetcher";
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
+import ErrorMessage from "../../components/common/ErrorMessage";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import fetcher from "../../lib/utils/fetcher";
+
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
 
 const CommentList = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const CommentList = () => {
 
   if (commentError)
     return (
-      <RedError message="Cannot load comments related to this article..." />
+      <ErrorMessage message="Cannot load comments related to this article..." />
     );
 
   const { comments } = commentData;

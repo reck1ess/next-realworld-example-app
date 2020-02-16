@@ -1,28 +1,23 @@
+import { useRouter } from "next/router";
 import React from "react";
 import useSWR, { mutate, trigger } from "swr";
-import { useRouter } from "next/router";
 
-import CustomImage from "../../components/common/CustomImage";
-import RedError from "../../components/common/RedError";
 import ArticleList from "../../components/article/ArticleList";
+import CustomImage from "../../components/common/CustomImage";
+import ErrorMessage from "../../components/common/ErrorMessage";
 import EditProfileButton from "../../components/profile/EditProfileButton";
 import FollowUserButton from "../../components/profile/FollowUserButton";
 import ProfileTab from "../../components/profile/ProfileTab";
 import api from "../../lib/api";
-import storage from "../../lib/utils/storage";
-import fetcher from "../../lib/utils/fetcher";
-
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
+import storage from "../../lib/utils/storage";
 
 const Profile = ({ articles, profile: initialProfile }) => {
   const router = useRouter();
   const {
     query: { pid }
   } = router;
-
-  /*
-  Fetch remote data related with profile
-  */
 
   const {
     data: fetchedProfile,
@@ -33,7 +28,7 @@ const Profile = ({ articles, profile: initialProfile }) => {
     { initialProfile }
   );
 
-  if (profileError) return <RedError message="Can't load profile" />;
+  if (profileError) return <ErrorMessage message="Can't load profile" />;
 
   const { profile } = fetchedProfile || initialProfile;
   const { username, bio, image, following } = profile;

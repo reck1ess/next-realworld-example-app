@@ -1,18 +1,18 @@
-import React from "react";
 import { useRouter } from "next/router";
+import React from "react";
 import useSWR from "swr";
-
 import ArticlePreview from "./ArticlePreview";
-import fetcher from "../../lib/utils/fetcher";
 import ListErrors from "../common/ListErrors";
-import Maybe from "../common/Maybe";
 import LoadingSpinner from "../common/LoadingSpinner";
+
+import Maybe from "../common/Maybe";
 import Pagination from "../common/Pagination";
 import PageContext from "../../lib/context/PageContext";
 import PageCountContext from "../../lib/context/PageCountContext";
 import useIsMounted from "../../lib/hooks/useIsMounted";
 import useViewport from "../../lib/hooks/useViewport";
 import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
 
 const ArticleList = ({ initialArticles }) => {
   const { page, setPage } = React.useContext(PageContext);

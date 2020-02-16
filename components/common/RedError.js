@@ -1,6 +1,6 @@
 import React from "react";
 
-const RedError = ({ message }) => (
+const ErrorMessage = ({ message }) => (
   <React.Fragment>
     <div className="error-container">
       <div className="error-content">{message}</div>
@@ -25,4 +25,4 @@ const RedError = ({ message }) => (
   </React.Fragment>
 );
 
-export default RedError;
+export default ErrorMessage;

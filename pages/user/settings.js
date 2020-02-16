@@ -1,5 +1,5 @@
-import React from "react";
 import Router from "next/router";
+import React from "react";
 import useSWR from "swr";
 
 import SettingsForm from "../../components/profile/SettingsForm";

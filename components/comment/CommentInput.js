@@ -1,12 +1,12 @@
-import React from "react";
 import { useRouter } from "next/router";
+import React from "react";
 import useSWR, { trigger } from "swr";
 
-import CustomLink from "../common/CustomLink";
 import CustomImage from "../common/CustomImage";
+import CustomLink from "../common/CustomLink";
 import checkLogin from "../../lib/utils/checkLogin";
-import storage from "../../lib/utils/storage";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import storage from "../../lib/utils/storage";
 
 const CommentInput = () => {
   const { data: currentUser } = useSWR("user", storage);

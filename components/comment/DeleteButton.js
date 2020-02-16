@@ -1,9 +1,9 @@
+import fetch from "isomorphic-unfetch";
 import { useRouter } from "next/router";
 import useSWR, { trigger } from "swr";
-import fetch from "isomorphic-unfetch";
 
-import storage from "../../lib/utils/storage";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import storage from "../../lib/utils/storage";
 
 const DeleteButton = ({ commentId }) => {
   const { data: currentUser } = useSWR("user", storage);

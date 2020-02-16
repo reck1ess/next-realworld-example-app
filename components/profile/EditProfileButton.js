@@ -1,7 +1,7 @@
 import React from "react";
 
-import Maybe from "../common/Maybe";
 import CustomLink from "../common/CustomLink";
+import Maybe from "../common/Maybe";
 
 const EditProfileButton = ({ isUser }) => (
   <Maybe test={isUser}>

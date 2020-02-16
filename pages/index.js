@@ -4,9 +4,9 @@ import useSWR from "swr";
 import Banner from "../components/home/Banner";
 import MainView from "../components/home/MainView";
 import Tags from "../components/home/Tags";
-import fetcher from "../lib/utils/fetcher";
-import { SERVER_BASE_URL } from "../lib/utils/constant";
 import PageCountContext from "../lib/context/PageCountContext";
+import { SERVER_BASE_URL } from "../lib/utils/constant";
+import fetcher from "../lib/utils/fetcher";
 
 const Home = ({ articles: initialArticles, tags: initialTags }) => {
   const { data: fetchedArticles } = useSWR(

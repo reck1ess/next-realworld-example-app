@@ -1,15 +1,15 @@
-import React from "react";
-import { useRouter } from "next/router";
-import useSWR from "swr";
 import marked from "marked";
+import { useRouter } from "next/router";
+import React from "react";
+import useSWR from "swr";
 
-import api from "../../lib/api";
 import ArticleMeta from "../../components/article/ArticleMeta";
-import RedError from "../../components/common/RedError";
-import fetcher from "../../lib/utils/fetcher";
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 import CommentList from "../../components/comment/CommentList";
+import ErrorMessage from "../../components/common/ErrorMessage";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import api from "../../lib/api";
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
 
 const Article = ({ data: initialData }) => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const Article = ({ data: initialData }) => {
     return <LoadingSpinner />;
   }
 
-  if (articleError) return <RedError message="Cannot load an article..." />;
+  if (articleError) return <ErrorMessage message="Cannot load an article..." />;
 
   const { article } = articleData;
 

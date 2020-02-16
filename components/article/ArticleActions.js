@@ -1,12 +1,12 @@
-import React from "react";
-import Router, { useRouter } from "next/router";
-import useSWR, { trigger } from "swr";
 import fetch from "isomorphic-unfetch";
+import Router, { useRouter } from "next/router";
+import React from "react";
+import useSWR, { trigger } from "swr";
 
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import checkLogin from "../../lib/utils/checkLogin";
-import storage from "../../lib/utils/storage";
 import CustomLink from "../common/CustomLink";
+import checkLogin from "../../lib/utils/checkLogin";
+import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import storage from "../../lib/utils/storage";
 
 const ArticleActions = ({ article }) => {
   const { data: currentUser } = useSWR("user", storage);

@@ -1,5 +1,5 @@
-import handleBrokenImage from "../../lib/utils/handleBrokenImage";
 import { DEFAULT_PROFILE_IMAGE } from "../../lib/utils/constant";
+import handleBrokenImage from "../../lib/utils/handleBrokenImage";
 
 const CustomImage = ({ src, alt, className }) => (
   <img

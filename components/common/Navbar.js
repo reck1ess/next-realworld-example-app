@@ -2,11 +2,11 @@ import React from "react";
 import useSWR from "swr";
 
 import CustomLink from "./CustomLink";
-import storage from "../../lib/utils/storage";
 import Maybe from "./Maybe";
-import checkLogin from "../../lib/utils/checkLogin";
-import PageContext from "../../lib/context/PageContext";
 import NavLink from "./NavLink";
+import PageContext from "../../lib/context/PageContext";
+import checkLogin from "../../lib/utils/checkLogin";
+import storage from "../../lib/utils/storage";
 
 const Navbar = () => {
   const { setPage } = React.useContext(PageContext);
