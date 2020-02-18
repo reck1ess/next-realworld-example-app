@@ -103,7 +103,10 @@ const ArticleList = ({ initialArticles }) => {
                 </li>
               )}
               {pages.map(page => {
-                const isCurrent = page === currentPage;
+                const isCurrent = !currentPage
+                  ? page === 0
+                  : page === currentPage;
+
                 const handleClick = e => {
                   e.preventDefault();
                   setPage(page);
