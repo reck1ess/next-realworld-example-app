@@ -2,6 +2,26 @@ import Document, { Head, Main, NextScript } from "next/document";
 import React from "react";
 import flush from "styled-jsx/server";
 
+const globalStyles = `
+img.lazyload:not([src]) {
+  visibility: hidden;
+}
+*:focus {
+  outline: none;
+}
+@media screen and (max-width: 767px) {
+  .col-md-9 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .navbar {
+    padding: 0;
+  }
+  .nav {
+    font-size: 15px;
+  }
+`;
+
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
@@ -28,6 +48,9 @@ class MyDocument extends Document {
           <meta name="msapplication-starturl" content="/" />
           <meta name="format-detection" content="telephone=no" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+          <meta name="theme-color" content="#ffffff" />
           <link
             href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
             rel="stylesheet"
@@ -39,49 +62,11 @@ class MyDocument extends Document {
             type="text/css"
           />
           <link rel="stylesheet" href="//demo.productionready.io/main.css" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-          <meta name="theme-color" content="#ffffff" />
-          <style jsx global>
-            {`
-              html,
-              body {
-                font-weight: normal;
-                font-style: normal;
-                -webkit-backface-visibility: hidden;
-                -webkit-overflow-scrolling: touch;
-                overscroll-behavior-y: contain;
-                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-                user-select: none;
-                margin: 0;
-              }
-              button {
-                font-family: -apple-system, "Noto Sans KR";
-                font-weight: normal;
-                font-style: normal;
-                padding: 0;
-                border: none;
-              }
-              img.lazyload:not([src]) {
-                visibility: hidden;
-              }
-              *:focus {
-                outline: none;
-              }
-              .row {
-                width: 100%;
-                margin: 0;
-              }
-              @media screen and (max-width: 360px) {
-                .navbar {
-                  padding: 0;
-                }
-                .nav {
-                  font-size: 15px;
-                }
-              }
-            `}
-          </style>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+          />
+          <style type="text/css">{globalStyles}</style>
         </Head>
         <body>
           <Main />
