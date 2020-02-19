@@ -11,7 +11,7 @@ const Login = () => {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Sign in</h1>
             <p className="text-xs-center">
-              <CustomLink href="/register">Need an account?</CustomLink>
+              <CustomLink href="/user/register">Need an account?</CustomLink>
             </p>
             <LoginForm />
           </div>

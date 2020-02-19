@@ -32,7 +32,7 @@ const Comment = ({ comment }) => {
         </CustomLink>
         &nbsp;
         <CustomLink
-          href={`/@${comment.author.username}`}
+          href={`/profile/${comment.author.username}`}
           className="comment-author"
         >
           {comment.author.username}
