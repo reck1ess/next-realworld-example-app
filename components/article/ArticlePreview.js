@@ -1,5 +1,6 @@
 import fetch from "isomorphic-unfetch";
 import Link from "next/link";
+import Router from "next/router";
 import React from "react";
 import useSWR from "swr";
 
@@ -19,11 +20,15 @@ const ArticlePreview = ({ article }) => {
   const [preview, setPreview] = React.useState(article);
   const [hover, setHover] = React.useState(false);
   const [currentIndex, setCurrentIndex] = React.useState(-1);
+
   const { data: currentUser } = useSWR("user", storage);
   const isLoggedIn = checkLogin(currentUser);
 
   const handleClickFavorite = async slug => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) {
+      Router.push(`/user/login`);
+      return;
+    }
 
     setPreview({
       ...preview,
@@ -34,15 +39,12 @@ const ArticlePreview = ({ article }) => {
     });
 
     try {
-      const response = await fetch(
-        `${SERVER_BASE_URL}/articles/${slug}/favorite`,
-        {
-          method: `${preview.favorited ? "DELETE" : "POST"}`,
-          headers: {
-            Authorization: `Token ${currentUser.token}`
-          }
+      await fetch(`${SERVER_BASE_URL}/articles/${slug}/favorite`, {
+        method: `${preview.favorited ? "DELETE" : "POST"}`,
+        headers: {
+          Authorization: `Token ${currentUser.token}`
         }
-      );
+      });
     } catch (error) {
       setPreview({
         ...preview,

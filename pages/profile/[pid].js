@@ -5,10 +5,12 @@ import useSWR, { mutate, trigger } from "swr";
 import ArticleList from "../../components/article/ArticleList";
 import CustomImage from "../../components/common/CustomImage";
 import ErrorMessage from "../../components/common/ErrorMessage";
+import Maybe from "../../components/common/Maybe";
 import EditProfileButton from "../../components/profile/EditProfileButton";
 import FollowUserButton from "../../components/profile/FollowUserButton";
 import ProfileTab from "../../components/profile/ProfileTab";
 import api from "../../lib/api";
+import checkLogin from "../../lib/utils/checkLogin";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import fetcher from "../../lib/utils/fetcher";
 import storage from "../../lib/utils/storage";
@@ -33,6 +35,8 @@ const Profile = ({ articles, profile: initialProfile }) => {
   const { profile } = fetchedProfile || initialProfile;
   const { username, bio, image, following } = profile;
   const { data: currentUser } = useSWR("user", storage);
+
+  const isLoggedIn = checkLogin(currentUser);
   const isUser = currentUser && username === currentUser.username;
 
   const handleFollow = async () => {
@@ -81,13 +85,15 @@ const Profile = ({ articles, profile: initialProfile }) => {
               <h4>{username}</h4>
               <p>{bio}</p>
               <EditProfileButton isUser={isUser} />
-              <FollowUserButton
-                isUser={isUser}
-                username={username}
-                following={following}
-                follow={handleFollow}
-                unfollow={handleUnfollow}
-              />
+              <Maybe test={isLoggedIn}>
+                <FollowUserButton
+                  isUser={isUser}
+                  username={username}
+                  following={following}
+                  follow={handleFollow}
+                  unfollow={handleUnfollow}
+                />
+              </Maybe>
             </div>
           </div>
         </div>
