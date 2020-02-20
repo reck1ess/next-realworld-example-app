@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
-import useSWR from "swr";
+import useSWR, { trigger } from "swr";
 import ArticlePreview from "./ArticlePreview";
 import ListErrors from "../common/ListErrors";
 import LoadingSpinner from "../common/LoadingSpinner";
@@ -101,6 +101,7 @@ const ArticleList = ({ initialArticles }) => {
                 onClick={e => {
                   e.preventDefault();
                   setPage(0);
+                  trigger(fetchURL);
                 }}
               >
                 <a className="page-link">{`<<`}</a>
@@ -112,6 +113,7 @@ const ArticleList = ({ initialArticles }) => {
                   onClick={e => {
                     e.preventDefault();
                     setPage(page - 1);
+                    trigger(fetchURL);
                   }}
                 >
                   <a className="page-link">{`<`}</a>
@@ -125,6 +127,7 @@ const ArticleList = ({ initialArticles }) => {
                 const handleClick = e => {
                   e.preventDefault();
                   setPage(page);
+                  trigger(fetchURL);
                 };
                 return (
                   <li
@@ -143,6 +146,7 @@ const ArticleList = ({ initialArticles }) => {
                   onClick={e => {
                     e.preventDefault();
                     setPage(page + 1);
+                    trigger(fetchURL);
                   }}
                 >
                   <a className="page-link">{`>`}</a>
@@ -154,6 +158,7 @@ const ArticleList = ({ initialArticles }) => {
                 onClick={e => {
                   e.preventDefault();
                   setPage(lastIndex);
+                  trigger(fetchURL);
                 }}
               >
                 <a className="page-link">{`>>`}</a>

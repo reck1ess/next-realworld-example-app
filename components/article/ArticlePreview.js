@@ -2,7 +2,7 @@ import fetch from "isomorphic-unfetch";
 import Link from "next/link";
 import Router from "next/router";
 import React from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR from "swr";
 
 import CustomLink from "../common/CustomLink";
 import CustomImage from "../common/CustomImage";
@@ -17,20 +17,12 @@ const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 const ArticlePreview = ({ article }) => {
   const { setPage } = React.useContext(PageContext);
 
+  const [preview, setPreview] = React.useState(article);
   const [hover, setHover] = React.useState(false);
   const [currentIndex, setCurrentIndex] = React.useState(-1);
 
-  React.useEffect(() => {
-    window.localStorage.setItem(article.slug, JSON.stringify(article));
-    mutate(article.slug, article);
-  }, []);
-
   const { data: currentUser } = useSWR("user", storage);
   const isLoggedIn = checkLogin(currentUser);
-
-  const { data: preview } = useSWR(article.slug, storage, {
-    initialData: article
-  });
 
   const handleClickFavorite = async slug => {
     if (!isLoggedIn) {
@@ -38,8 +30,8 @@ const ArticlePreview = ({ article }) => {
       return;
     }
 
-    mutate(article.slug, {
-      ...article,
+    setPreview({
+      ...preview,
       favorited: !preview.favorited,
       favoritesCount: preview.favorited
         ? preview.favoritesCount - 1
@@ -53,10 +45,9 @@ const ArticlePreview = ({ article }) => {
           Authorization: `Token ${currentUser.token}`
         }
       });
-      trigger(article.slug);
     } catch (error) {
-      mutate(article.slug, {
-        ...article,
+      setPreview({
+        ...preview,
         favorited: !preview.favorited,
         favoritesCount: preview.favorited
           ? preview.favoritesCount - 1
