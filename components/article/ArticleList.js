@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import React from "react";
 import useSWR, { trigger } from "swr";
+
 import ArticlePreview from "./ArticlePreview";
 import ListErrors from "../common/ListErrors";
 import LoadingSpinner from "../common/LoadingSpinner";
-
 import Maybe from "../common/Maybe";
 import Pagination from "../common/Pagination";
 import PageContext from "../../lib/context/PageContext";
@@ -16,8 +16,9 @@ import fetcher from "../../lib/utils/fetcher";
 
 const ArticleList = ({ initialArticles }) => {
   const { page, setPage } = React.useContext(PageContext);
-  const { pageCount } = React.useContext(PageCountContext);
-  const lastIndex = Math.ceil(pageCount / 20);
+  const { pageCount, setPageCount } = React.useContext(PageCountContext);
+  const lastIndex =
+    pageCount > 480 ? Math.ceil(pageCount / 20) : Math.ceil(pageCount / 20) - 1;
 
   const isMounted = useIsMounted();
   const { vw } = useViewport();
@@ -74,6 +75,8 @@ const ArticleList = ({ initialArticles }) => {
   }
 
   const { articles, articlesCount } = fetchedArticles || initialArticles;
+
+  setPageCount(articlesCount);
 
   if (articles && articles.length === 0) {
     return <div className="article-preview">No articles are here... yet.</div>;
