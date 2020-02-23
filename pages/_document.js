@@ -34,10 +34,12 @@ class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
+          <title>Next Realwolrd Example App</title>
           <meta charSet="utf-8" />
           <meta name="robots" content="index, follow" />
           <meta name="google" content="notranslate" />
           <meta name="keywords" content="realworld, next.js, swr" />
+          <meta name="description" content="Next.js + SWR codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the RealWorld spec and API" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-title" content="conduit" />
