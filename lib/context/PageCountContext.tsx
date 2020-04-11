@@ -27,13 +27,11 @@ const PageCountContextProvider = ({ children }: Props) => {
 
 export const usePageCountState = () => {
   const state = React.useContext(PageCountStateContext);
-  if (!state) throw new Error("PageCountContextProvider not found");
   return state;
 };
 
 export const usePageCountDispatch = () => {
   const dispatch = React.useContext(PageCountDispatchContext);
-  if (!dispatch) throw new Error("PageCountContextProvider not found");
   return dispatch;
 };
 

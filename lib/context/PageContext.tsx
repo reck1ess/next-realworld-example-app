@@ -27,13 +27,11 @@ const PageContextProvider = ({ children }: Props) => {
 
 export const usePageState = () => {
   const state = React.useContext(PageStateContext);
-  if (!state) throw new Error("PageContextProvider not found");
   return state;
 };
 
 export const usePageDispatch = () => {
   const dispatch = React.useContext(PageDispatchContext);
-  if (!dispatch) throw new Error("PageContextProvider not found");
   return dispatch;
 };
 
