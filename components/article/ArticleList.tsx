@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import useSWR from "swr";
 
 import ArticlePreview from "./ArticlePreview";
 import ListErrors from "../common/ListErrors";
@@ -12,9 +13,9 @@ import {
   usePageCountDispatch,
 } from "../../lib/context/PageCountContext";
 import useIsMounted from "../../lib/hooks/useIsMounted";
-import useRequest from "../../lib/hooks/useRequest";
 import useViewport from "../../lib/hooks/useViewport";
 import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
 
 const ArticleList = ({ initialArticles }) => {
   const page = usePageState();
@@ -59,9 +60,10 @@ const ArticleList = ({ initialArticles }) => {
       break;
   }
 
-  const { data: fetchedArticles, error: articleError } = useRequest({
-    url: fetchURL,
-  });
+  const { data: fetchedArticles, error: articleError } = useSWR(
+    fetchURL,
+    fetcher
+  );
 
   if (articleError) {
     return (

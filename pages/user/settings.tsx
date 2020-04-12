@@ -13,16 +13,16 @@ const Settings = ({ res }) => {
   if (!isLoggedIn) {
     if (res) {
       res.writeHead(302, {
-        Location: "/"
+        Location: "/",
       });
       res.end();
     }
     Router.push(`/`);
   }
 
-  const handleLogout = async e => {
+  const handleLogout = async (e) => {
     e.preventDefault();
-    window.localStorage.removeItem(`user`);
+    window.localStorage.removeItem("user");
     mutate("user", null);
     Router.push(`/`).then(() => trigger("user"));
   };
@@ -47,7 +47,7 @@ const Settings = ({ res }) => {
 
 Settings.getInitialProps = async ({ res }) => {
   return {
-    res
+    res,
   };
 };
 

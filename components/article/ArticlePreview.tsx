@@ -69,10 +69,6 @@ const ArticlePreview = ({ article }) => {
 
   if (!article) return;
 
-  console.log("====================================");
-  console.log("preview: ", preview);
-  console.log("====================================");
-
   return (
     <div className="article-preview" style={{ padding: "1.5rem 0.5rem" }}>
       <div className="article-meta">
