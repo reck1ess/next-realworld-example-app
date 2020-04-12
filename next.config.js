@@ -1,3 +1,5 @@
+const withPurgeCss = require("next-purgecss");
+
 const withOffline = require("next-offline");
 
 const nextConfig = {
@@ -35,4 +37,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withOffline(nextConfig);
+module.exports = withPurgeCss(withOffline(nextConfig));
