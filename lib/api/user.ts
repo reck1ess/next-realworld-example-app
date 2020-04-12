@@ -66,13 +66,15 @@ const UserAPI = {
     }
   },
   follow: async (username) => {
+    const user: any = JSON.parse(window.localStorage.getItem("user"));
+    const token = user?.token;
     try {
       const response = await axios.post(
         `${SERVER_BASE_URL}/profiles/${username}/follow`,
         {},
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Token ${encodeURIComponent(token)}`,
           },
         }
       );
@@ -82,12 +84,14 @@ const UserAPI = {
     }
   },
   unfollow: async (username) => {
+    const user: any = JSON.parse(window.localStorage.getItem("user"));
+    const token = user?.token;
     try {
       const response = await axios.delete(
         `${SERVER_BASE_URL}/profiles/${username}/follow`,
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Token ${encodeURIComponent(token)}`,
           },
         }
       );

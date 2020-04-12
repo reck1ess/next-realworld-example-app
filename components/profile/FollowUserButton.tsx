@@ -11,10 +11,10 @@ const FollowUserButton = ({
     return null;
   }
 
-  const handleClick = React.useCallback((e) => {
+  const handleClick = (e) => {
     e.preventDefault();
     following ? unfollow(username) : follow(username);
-  }, []);
+  };
 
   return (
     <button

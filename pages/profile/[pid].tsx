@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import useSWR, { mutate, trigger } from "swr";
@@ -12,9 +11,9 @@ import FollowUserButton from "../../components/profile/FollowUserButton";
 import ProfileTab from "../../components/profile/ProfileTab";
 import ArticleAPI from "../../lib/api/article";
 import UserAPI from "../../lib/api/user";
-import useRequest from "../../lib/hooks/useRequest";
 import checkLogin from "../../lib/utils/checkLogin";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
 import storage from "../../lib/utils/storage";
 
 const Profile = ({ initialProfile, initialArticles }) => {
@@ -23,8 +22,12 @@ const Profile = ({ initialProfile, initialArticles }) => {
     query: { pid },
   } = router;
 
-  const { data: fetchedProfile, error: profileError } = useRequest(
-    { url: `${SERVER_BASE_URL}/profiles/${encodeURIComponent(String(pid))}` },
+  const {
+    data: fetchedProfile,
+    error: profileError,
+  } = useSWR(
+    `${SERVER_BASE_URL}/profiles/${encodeURIComponent(String(pid))}`,
+    fetcher,
     { initialData: initialProfile }
   );
 
@@ -43,16 +46,7 @@ const Profile = ({ initialProfile, initialArticles }) => {
       { profile: { ...profile, following: true } },
       false
     );
-    await axios.put(
-      `${SERVER_BASE_URL}/profiles/${pid}/follow`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${encodeURIComponent(currentUser?.token)}`,
-        },
-      }
-    );
+    UserAPI.follow(pid);
     trigger(`${SERVER_BASE_URL}/profiles/${pid}`);
   };
 
@@ -62,12 +56,7 @@ const Profile = ({ initialProfile, initialArticles }) => {
       { profile: { ...profile, following: true } },
       true
     );
-    await axios.delete(`${SERVER_BASE_URL}/profiles/${pid}/follow`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${encodeURIComponent(currentUser?.token)}`,
-      },
-    });
+    UserAPI.unfollow(pid);
     trigger(`${SERVER_BASE_URL}/profiles/${pid}`);
   };
 

@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
 import React from "react";
+import useSWR from "swr";
 
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 import ErrorMessage from "../common/ErrorMessage";
 import LoadingSpinner from "../common/LoadingSpinner";
 
-import useRequest from "../../lib/hooks/useRequest";
-import { Comments, CommentType } from "../../lib/types/commentType";
+import { CommentType } from "../../lib/types/commentType";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
+import fetcher from "../../lib/utils/fetcher";
 
 const CommentList = () => {
   const router = useRouter();
@@ -16,9 +17,10 @@ const CommentList = () => {
     query: { pid },
   } = router;
 
-  const { data, error } = useRequest<Comments | undefined, any>({
-    url: `${SERVER_BASE_URL}/articles/${pid}/comments`,
-  });
+  const { data, error } = useSWR(
+    `${SERVER_BASE_URL}/articles/${pid}/comments`,
+    fetcher
+  );
 
   if (!data) {
     return <LoadingSpinner />;
