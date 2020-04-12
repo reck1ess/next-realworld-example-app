@@ -51,10 +51,12 @@ const UpdateArticleEditor = ({ article: initialArticle }) => {
       }
     );
     setLoading(false);
-    setErrors(status !== 200 ? data.errors : []);
+
     if (status !== 200) {
-      Router.push(`/`);
+      setErrors(data.errors);
     }
+
+    Router.push(`/`);
   };
 
   return (
