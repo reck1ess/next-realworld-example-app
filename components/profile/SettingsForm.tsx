@@ -33,7 +33,7 @@ const SettingsForm = () => {
     setUserInfo(newState);
   };
 
-  const submitForm = React.useCallback(async (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -55,17 +55,17 @@ const SettingsForm = () => {
     );
 
     setLoading(false);
-    setErrors(status !== 200 ? data.errors.body : []);
-
-    if (data?.user) {
-      window.localStorage.setItem("user", data.user);
-      mutate("user", data.user);
-    }
 
     if (status !== 200) {
+      setErrors(data.errors.body);
+    }
+
+    if (data?.user) {
+      window.localStorage.setItem("user", JSON.stringify(data.user));
+      mutate("user", data.user);
       Router.push(`/`);
     }
-  }, []);
+  };
 
   return (
     <React.Fragment>

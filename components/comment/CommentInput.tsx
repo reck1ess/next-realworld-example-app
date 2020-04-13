@@ -24,7 +24,7 @@ const CommentInput = () => {
     setContent(e.target.value);
   }, []);
 
-  const handleSubmit = React.useCallback(async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     await axios.post(
@@ -44,7 +44,7 @@ const CommentInput = () => {
     setLoading(false);
     setContent("");
     trigger(`${SERVER_BASE_URL}/articles/${pid}/comments`);
-  }, []);
+  };
 
   if (!isLoggedIn) {
     return (
