@@ -3,7 +3,7 @@ import React from "react";
 import useSWR from "swr";
 
 import ArticlePreview from "./ArticlePreview";
-import ListErrors from "../common/ListErrors";
+import ErrorMessage from "../common/ErrorMessage";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Maybe from "../common/Maybe";
 import Pagination from "../common/Pagination";
@@ -12,21 +12,18 @@ import {
   usePageCountState,
   usePageCountDispatch,
 } from "../../lib/context/PageCountContext";
-import useIsMounted from "../../lib/hooks/useIsMounted";
 import useViewport from "../../lib/hooks/useViewport";
 import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
 import fetcher from "../../lib/utils/fetcher";
 
-const ArticleList = ({ initialArticles }) => {
+const ArticleList = () => {
   const page = usePageState();
   const pageCount = usePageCountState();
   const setPageCount = usePageCountDispatch();
   const lastIndex =
     pageCount > 480 ? Math.ceil(pageCount / 20) : Math.ceil(pageCount / 20) - 1;
 
-  const isMounted = useIsMounted();
   const { vw } = useViewport();
-
   const router = useRouter();
   const { asPath, pathname, query } = router;
   const { favorite, follow, tag, pid } = query;
@@ -60,28 +57,22 @@ const ArticleList = ({ initialArticles }) => {
       break;
   }
 
-  const { data: fetchedArticles, error: articleError } = useSWR(
-    fetchURL,
-    fetcher
-  );
+  const { data, error } = useSWR(fetchURL, fetcher);
 
-  if (articleError) {
+  if (error) {
     return (
       <div className="col-md-9">
         <div className="feed-toggle">
           <ul className="nav nav-pills outline-active"></ul>
         </div>
-        <ListErrors errors={articleError} />
+        <ErrorMessage message="Cannot load recent articles..." />
       </div>
     );
   }
 
-  if (isMounted && !fetchedArticles) {
-    return <LoadingSpinner />;
-  }
+  if (!data) return <LoadingSpinner />;
 
-  const { articles, articlesCount } = fetchedArticles || initialArticles;
-
+  const { articles, articlesCount } = data;
   setPageCount(articlesCount);
 
   if (articles && articles.length === 0) {

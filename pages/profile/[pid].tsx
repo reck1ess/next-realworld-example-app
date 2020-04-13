@@ -9,14 +9,13 @@ import Maybe from "../../components/common/Maybe";
 import EditProfileButton from "../../components/profile/EditProfileButton";
 import FollowUserButton from "../../components/profile/FollowUserButton";
 import ProfileTab from "../../components/profile/ProfileTab";
-import ArticleAPI from "../../lib/api/article";
 import UserAPI from "../../lib/api/user";
 import checkLogin from "../../lib/utils/checkLogin";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import fetcher from "../../lib/utils/fetcher";
 import storage from "../../lib/utils/storage";
 
-const Profile = ({ initialProfile, initialArticles }) => {
+const Profile = ({ initialProfile }) => {
   const router = useRouter();
   const {
     query: { pid },
@@ -35,8 +34,8 @@ const Profile = ({ initialProfile, initialArticles }) => {
 
   const { profile } = fetchedProfile || initialProfile;
   const { username, bio, image, following } = profile;
-  const { data: currentUser } = useSWR("user", storage);
 
+  const { data: currentUser } = useSWR("user", storage);
   const isLoggedIn = checkLogin(currentUser);
   const isUser = currentUser && username === currentUser?.username;
 
@@ -94,7 +93,7 @@ const Profile = ({ initialProfile, initialArticles }) => {
             <div className="articles-toggle">
               <ProfileTab profile={profile} />
             </div>
-            <ArticleList initialArticles={initialArticles} />
+            <ArticleList />
           </div>
         </div>
       </div>
@@ -104,8 +103,7 @@ const Profile = ({ initialProfile, initialArticles }) => {
 
 Profile.getInitialProps = async ({ query: { pid } }) => {
   const { data: initialProfile } = await UserAPI.get(pid);
-  const { data: initialArticles } = await ArticleAPI.byAuthor(pid);
-  return { initialProfile, initialArticles };
+  return { initialProfile };
 };
 
 export default Profile;
