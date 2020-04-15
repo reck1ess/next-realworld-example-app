@@ -1,9 +1,15 @@
+import Head from "next/head";
 import React from "react";
 
 import CustomLink from "../../components/common/CustomLink";
 import RegisterForm from "../../components/profile/RegisterForm";
 
 const Register = () => (
+  <>
+  <Head>
+    <title>REGISTER | NEXT REALWORLD</title>
+    <meta name="description" content="Please register before login" />
+  </Head>
   <div className="auth-page">
     <div className="container page">
       <div className="row">
@@ -20,6 +26,7 @@ const Register = () => (
       </div>
     </div>
   </div>
+  </>
 );
 
 export default Register;
