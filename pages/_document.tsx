@@ -14,14 +14,14 @@ class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          <meta charSet="utf-8" />
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0 viewport-fit=cover"
-          />
           <meta name="robots" content="index, follow" />
+          <meta key="googlebot" name="googlebot" content="index,follow" />
           <meta name="google" content="notranslate" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="keywords" content="nextjs, realworld" />
           <meta property="og:locale" content="en_US" />
           <meta property="og:site_name" content="next-realworld" />
           <meta property="og:title" content="Next.js realworld example app" />

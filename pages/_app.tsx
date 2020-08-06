@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React from "react";
 
 import Layout from "components/common/Layout";
@@ -11,11 +12,19 @@ if (typeof window !== "undefined") {
 }
 
 const MyApp = ({ Component, pageProps }) => (
-  <ContextProvider>
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  </ContextProvider>
+  <>
+    <Head>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+      />
+    </Head>
+    <ContextProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ContextProvider>
+  </>
 );
 
 export default MyApp;
