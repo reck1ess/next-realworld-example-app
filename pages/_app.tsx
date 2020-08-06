@@ -1,8 +1,8 @@
 import React from "react";
 
-import Layout from "../components/common/Layout";
-import ContextProvider from "../lib/context";
-import "../styles.css";
+import Layout from "components/common/Layout";
+import ContextProvider from "lib/context";
+import "styles.css";
 
 if (typeof window !== "undefined") {
   require("lazysizes/plugins/attrchange/ls.attrchange.js");
@@ -10,12 +10,12 @@ if (typeof window !== "undefined") {
   require("lazysizes");
 }
 
-export default ({ Component, pageProps }) => {
-  return (
-    <ContextProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ContextProvider>
-  );
-};
+const MyApp = ({ Component, pageProps }) => (
+  <ContextProvider>
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  </ContextProvider>
+);
+
+export default MyApp;
