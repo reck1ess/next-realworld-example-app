@@ -16,6 +16,23 @@ img.lazyload:not([src]) {
   outline: none;
 }
 
+.article-content p {
+  font-family: "source serif pro", serif;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  font-weight: 500 !important;
+  margin: 1.6rem 0 1rem;
+}
+
 @media screen and (max-width: 767px) {
   .col-md-9 {
     flex: 0 0 100%;
