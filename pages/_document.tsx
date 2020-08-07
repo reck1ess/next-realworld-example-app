@@ -1,3 +1,4 @@
+import { extractCritical } from "emotion-server";
 import Document, { Head, Main, NextScript } from "next/document";
 import React from "react";
 import flush from "styled-jsx/server";
@@ -7,7 +8,8 @@ class MyDocument extends Document {
     const initialProps = await Document.getInitialProps(ctx);
     const { html, head } = ctx.renderPage();
     const styles = flush();
-    return { html, head, styles, ...initialProps };
+    const emotionStyles = extractCritical(html);
+    return { ...emotionStyles, ...initialProps, html, head, styles };
   }
 
   render() {
