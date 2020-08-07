@@ -38,6 +38,7 @@ const MainContent = styled("div")`
 `;
 
 const ContentContainer = styled("div")`
+  width: 100%;
   @media (min-width: 768px) {
     position: relative;
     min-height: 1px;
