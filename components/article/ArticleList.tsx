@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import useSWR from "swr";
 
 import ArticlePreview from "components/article/ArticlePreview";
@@ -64,12 +64,17 @@ const ArticleList = () => {
   ]);
 
   const { data, error } = useSWR(fetchURL, fetcher);
+  const { articles, articlesCount } = data || {
+    articles: [],
+    articlesCount: 0,
+  };
+
+  useEffect(() => {
+    setPageCount(articlesCount);
+  }, [articlesCount]);
 
   if (error) return <ErrorMessage message="Cannot load recent articles..." />;
   if (!data) return <LoadingSpinner />;
-
-  const { articles, articlesCount } = data;
-  setPageCount(articlesCount);
 
   if (articles?.length === 0) {
     return <EmptyMessage>No articles are here... yet.</EmptyMessage>;
