@@ -21,8 +21,10 @@ const CustomLink = ({
   onClick,
   children,
 }: CustomLinkProps) => (
-  <Link href={href} as={as} passHref onClick={onClick}>
-    <Anchor className={className || ""}>{children}</Anchor>
+  <Link href={href} as={as} passHref>
+    <Anchor onClick={onClick} className={className || ""}>
+      {children}
+    </Anchor>
   </Link>
 );
 
