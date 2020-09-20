@@ -30,8 +30,9 @@ const NavLink = ({ href, as, onClick, children }: NavLinkProps) => {
   const { asPath } = router;
 
   return (
-    <Link href={href} as={as} passHref onClick={onClick}>
+    <Link href={href} as={as} passHref>
       <Anchor
+        onClick={onClick}
         className={`${
           encodeURIComponent(asPath) === encodeURIComponent(as) && `active`
         }`}
