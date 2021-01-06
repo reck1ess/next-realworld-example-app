@@ -10,7 +10,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "emotion": "^10.0.27",
     "emotion-server": "^10.0.27",
     "lazysizes": "^5.2.2",
