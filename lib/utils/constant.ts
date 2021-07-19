@@ -1,6 +1,6 @@
 export const SERVER_BASE_URL = `https://conduit.productionready.io/api`;
 
-export const APP_NAME = `Gary's Message Board`;
+export const APP_NAME = `Gary's Board`;
 
 export const ARTICLE_QUERY_MAP = {
   "tab=feed": `${SERVER_BASE_URL}/articles/feed`,
