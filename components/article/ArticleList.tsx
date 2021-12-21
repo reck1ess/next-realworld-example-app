@@ -1,20 +1,25 @@
+import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo, useEffect } from "react";
 import useSWR from "swr";
 
-import ArticlePreview from "./ArticlePreview";
-import ErrorMessage from "../common/ErrorMessage";
-import LoadingSpinner from "../common/LoadingSpinner";
-import Maybe from "../common/Maybe";
-import Pagination from "../common/Pagination";
-import { usePageState } from "../../lib/context/PageContext";
+import ArticlePreview from "components/article/ArticlePreview";
+import ErrorMessage from "components/common/ErrorMessage";
+import LoadingSpinner from "components/common/LoadingSpinner";
+import Maybe from "components/common/Maybe";
+import Pagination from "components/common/Pagination";
+import { usePageState } from "lib/context/PageContext";
 import {
   usePageCountState,
   usePageCountDispatch,
-} from "../../lib/context/PageCountContext";
-import useViewport from "../../lib/hooks/useViewport";
-import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
-import fetcher from "../../lib/utils/fetcher";
+} from "lib/context/PageCountContext";
+import { SERVER_BASE_URL, DEFAULT_LIMIT } from "lib/utils/constant";
+import fetcher from "lib/utils/fetcher";
+
+const EmptyMessage = styled("div")`
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 0;
+`;
 
 const ArticleList = () => {
   const page = usePageState();
@@ -23,60 +28,56 @@ const ArticleList = () => {
   const lastIndex =
     pageCount > 480 ? Math.ceil(pageCount / 20) : Math.ceil(pageCount / 20) - 1;
 
-  const { vw } = useViewport();
   const router = useRouter();
   const { asPath, pathname, query } = router;
   const { favorite, follow, tag, pid } = query;
-
   const isProfilePage = pathname.startsWith(`/profile`);
 
-  let fetchURL = `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`;
+  const getFetchURL = () => {
+    switch (true) {
+      case !!tag:
+        return `${SERVER_BASE_URL}/articles${asPath}&offset=${
+          page * DEFAULT_LIMIT
+        }`;
+      case isProfilePage && !!favorite:
+        return `${SERVER_BASE_URL}/articles?favorited=${encodeURIComponent(
+          String(pid)
+        )}&offset=${page * DEFAULT_LIMIT}`;
+      case isProfilePage && !favorite:
+        return `${SERVER_BASE_URL}/articles?author=${encodeURIComponent(
+          String(pid)
+        )}&offset=${page * DEFAULT_LIMIT}`;
+      case !isProfilePage && !!follow:
+        return `${SERVER_BASE_URL}/articles/feed?offset=${
+          page * DEFAULT_LIMIT
+        }`;
+      default:
+        return `${SERVER_BASE_URL}/articles?offset=${page * DEFAULT_LIMIT}`;
+    }
+  };
 
-  switch (true) {
-    case !!tag:
-      fetchURL = `${SERVER_BASE_URL}/articles${asPath}&offset=${
-        page * DEFAULT_LIMIT
-      }`;
-      break;
-    case isProfilePage && !!favorite:
-      fetchURL = `${SERVER_BASE_URL}/articles?favorited=${encodeURIComponent(
-        String(pid)
-      )}&offset=${page * DEFAULT_LIMIT}`;
-      break;
-    case isProfilePage && !favorite:
-      fetchURL = `${SERVER_BASE_URL}/articles?author=${encodeURIComponent(
-        String(pid)
-      )}&offset=${page * DEFAULT_LIMIT}`;
-      break;
-    case !isProfilePage && !!follow:
-      fetchURL = `${SERVER_BASE_URL}/articles/feed?offset=${
-        page * DEFAULT_LIMIT
-      }`;
-      break;
-    default:
-      break;
-  }
+  let fetchURL = useMemo(() => getFetchURL(), [
+    favorite,
+    page,
+    tag,
+    isProfilePage,
+  ]);
 
   const { data, error } = useSWR(fetchURL, fetcher);
+  const { articles, articlesCount } = data || {
+    articles: [],
+    articlesCount: 0,
+  };
 
-  if (error) {
-    return (
-      <div className="col-md-9">
-        <div className="feed-toggle">
-          <ul className="nav nav-pills outline-active"></ul>
-        </div>
-        <ErrorMessage message="Cannot load recent articles..." />
-      </div>
-    );
-  }
+  useEffect(() => {
+    setPageCount(articlesCount);
+  }, [articlesCount]);
 
+  if (error) return <ErrorMessage message="Cannot load recent articles..." />;
   if (!data) return <LoadingSpinner />;
 
-  const { articles, articlesCount } = data;
-  setPageCount(articlesCount);
-
-  if (articles && articles.length === 0) {
-    return <div className="article-preview">No articles are here... yet.</div>;
+  if (articles?.length === 0) {
+    return <EmptyMessage>No articles are here... yet.</EmptyMessage>;
   }
 
   return (
@@ -89,7 +90,7 @@ const ArticleList = () => {
         <Pagination
           total={pageCount}
           limit={20}
-          pageCount={vw >= 768 ? 10 : 5}
+          pageCount={10}
           currentPage={page}
           lastIndex={lastIndex}
           fetchURL={fetchURL}
