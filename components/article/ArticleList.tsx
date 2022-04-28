@@ -16,7 +16,7 @@ import useViewport from "../../lib/hooks/useViewport";
 import { SERVER_BASE_URL, DEFAULT_LIMIT } from "../../lib/utils/constant";
 import fetcher from "../../lib/utils/fetcher";
 
-const ArticleList = () => {
+const ArticleList = ({isProfile}) => {
   const page = usePageState();
   const pageCount = usePageCountState();
   const setPageCount = usePageCountDispatch();
@@ -82,6 +82,7 @@ const ArticleList = () => {
   return (
     <>
       {articles?.map((article) => (
+        isProfile ? <ArticlePreview key={article.slug} article={article} /> :
         <ArticlePreview key={article.slug} article={article} />
       ))}
 

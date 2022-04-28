@@ -93,7 +93,7 @@ const Profile = ({ initialProfile }) => {
             <div className="articles-toggle">
               <ProfileTab profile={profile} />
             </div>
-            <ArticleList />
+            <ArticleList isProfile={true}/>
           </div>
         </div>
       </div>

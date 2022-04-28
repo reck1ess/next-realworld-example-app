@@ -8,7 +8,7 @@ const MainView = () => (
     <div className="feed-toggle">
       <TabList />
     </div>
-    <ArticleList />
+    <ArticleList isProfile={false}/>
   </div>
 );
 
