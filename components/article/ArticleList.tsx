@@ -3,7 +3,7 @@ import React from "react";
 import useSWR from "swr";
 
 import ArticlePreview from "./ArticlePreview";
-import ArticlePreviewProfile from "./ArticlePreviewProfile";
+import ArticlePreviewProfile from "./ArticlePreviewProfile/ArticlePreviewProfile";
 import ErrorMessage from "../common/ErrorMessage";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Maybe from "../common/Maybe";

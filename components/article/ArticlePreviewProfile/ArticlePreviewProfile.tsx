@@ -4,12 +4,12 @@ import Router from "next/router";
 import React from "react";
 import useSWR from "swr";
 
-import CustomLink from "../common/CustomLink";
-import CustomImage from "../common/CustomImage";
-import { usePageDispatch } from "../../lib/context/PageContext";
-import checkLogin from "../../lib/utils/checkLogin";
-import { SERVER_BASE_URL } from "../../lib/utils/constant";
-import storage from "../../lib/utils/storage";
+import CustomLink from "../../common/CustomLink";
+import CustomImage from "../../common/CustomImage";
+import { usePageDispatch } from "../../../lib/context/PageContext";
+import checkLogin from "../../../lib/utils/checkLogin";
+import { SERVER_BASE_URL } from "../../../lib/utils/constant";
+import storage from "../../../lib/utils/storage";
 
 const FAVORITED_CLASS = "btn btn-sm btn-primary";
 const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
@@ -70,7 +70,7 @@ const ArticlePreview = ({ article }) => {
   if (!article) return;
 
   return (
-    <div className="article-preview" style={{ padding: "1.5rem 0.5rem" }}>
+    <div className="article-preview test-class" style={{ padding: "1.5rem 0.5rem" }}>
       <div className="article-meta">
         <CustomLink
           href="/profile/[pid]"
