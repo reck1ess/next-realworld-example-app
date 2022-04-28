@@ -3,6 +3,7 @@ import React from "react";
 import useSWR from "swr";
 
 import ArticlePreview from "./ArticlePreview";
+import ArticlePreviewProfile from "./ArticlePreviewProfile";
 import ErrorMessage from "../common/ErrorMessage";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Maybe from "../common/Maybe";
@@ -82,7 +83,7 @@ const ArticleList = ({isProfile}) => {
   return (
     <>
       {articles?.map((article) => (
-        isProfile ? <ArticlePreview key={article.slug} article={article} /> :
+        isProfile ? <ArticlePreviewProfile key={article.slug} article={article} /> :
         <ArticlePreview key={article.slug} article={article} />
       ))}
 
