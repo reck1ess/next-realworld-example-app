@@ -41,7 +41,7 @@ const PublishArticleEditor = () => {
 
     setLoading(false);
 
-    if (status !== 200) {
+    if (status !== 201) {
       setErrors(data.errors);
     }
 
