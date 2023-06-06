@@ -4,6 +4,7 @@ import { mutate } from "swr";
 
 import ListErrors from "../common/ListErrors";
 import UserAPI from "../../lib/api/user";
+import { trackFormSubmission, trackErrorMessage } from "../../utils/amplitude";
 
 const LoginForm = () => {
   const [isLoading, setLoading] = React.useState(false);
@@ -24,9 +25,12 @@ const LoginForm = () => {
     e.preventDefault();
     setLoading(true);
 
+    trackFormSubmission('Login', {email});
+
     try {
       const { data, status } = await UserAPI.login(email, password);
       if (status !== 200) {
+        trackErrorMessage('Login', data?.errors);
         setErrors(data.errors);
       }
 

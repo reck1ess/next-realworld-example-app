@@ -3,6 +3,7 @@ import { trigger } from "swr";
 
 import { getRange, getPageInfo } from "../../lib/utils/calculatePagination";
 import { usePageDispatch, usePageState } from "../../lib/context/PageContext";
+import { trackButtonClick } from "../../utils/amplitude";
 import Maybe from "./Maybe";
 
 interface PaginationProps {
@@ -37,6 +38,7 @@ const Pagination = ({
     (e: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
       e.preventDefault();
       setPage(index);
+      trackButtonClick(`clicked ${index + 1} page`)
       trigger(fetchURL);
     },
     []

@@ -5,6 +5,8 @@ import { mutate } from "swr";
 import ListErrors from "../common/ListErrors";
 import UserAPI from "../../lib/api/user";
 
+import { trackFormSubmission } from "../../utils/amplitude";
+
 const RegisterForm = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
@@ -29,6 +31,7 @@ const RegisterForm = () => {
     e.preventDefault();
     setLoading(true);
 
+    trackFormSubmission('RegisterForm', {username, email, password});
     try {
       const { data, status } = await UserAPI.register(
         username,

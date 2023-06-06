@@ -17,5 +17,9 @@ const trackFormSubmission = (form: string, formData: any): void => {
 
 };
 
-  
-export { trackPageView, trackButtonClick, trackFormSubmission };
+const trackErrorMessage = (source: string, error: string): void => {
+    // Replace this with your actual analytics logging code
+    console.log(`trackErrorMessage source: ${source} error: ${error}`);
+  };
+
+export { trackPageView, trackButtonClick, trackFormSubmission, trackErrorMessage };
