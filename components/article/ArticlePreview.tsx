@@ -10,7 +10,7 @@ import { usePageDispatch } from "../../lib/context/PageContext";
 import checkLogin from "../../lib/utils/checkLogin";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import storage from "../../lib/utils/storage";
-
+import { trackButtonClick } from "utils/amplitude";
 const FAVORITED_CLASS = "btn btn-sm btn-primary";
 const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 
@@ -100,7 +100,10 @@ const ArticlePreview = ({ article }) => {
             className={
               preview.favorited ? FAVORITED_CLASS : NOT_FAVORITED_CLASS
             }
-            onClick={() => handleClickFavorite(preview.slug)}
+            onClick={() => {
+              trackButtonClick('favoriteClicked');
+              handleClickFavorite(preview.slug)
+            }}
           >
             <i className="ion-heart" /> {preview.favoritesCount}
           </button>
@@ -121,7 +124,10 @@ const ArticlePreview = ({ article }) => {
               <Link href={`/?tag=${tag}`} as={`/?tag=${tag}`} key={index}>
                 <li
                   className="tag-default tag-pill tag-outline"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    
+                    e.stopPropagation()
+                  }}
                   onMouseOver={() => {
                     setHover(true);
                     setCurrentIndex(index);

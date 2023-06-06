@@ -14,6 +14,7 @@ import checkLogin from "../../lib/utils/checkLogin";
 import { SERVER_BASE_URL } from "../../lib/utils/constant";
 import fetcher from "../../lib/utils/fetcher";
 import storage from "../../lib/utils/storage";
+import { trackButtonClick } from "../../utils/amplitude";
 
 const Profile = ({ initialProfile }) => {
   const router = useRouter();
@@ -40,6 +41,7 @@ const Profile = ({ initialProfile }) => {
   const isUser = currentUser && username === currentUser?.username;
 
   const handleFollow = async () => {
+    trackButtonClick("follow");
     mutate(
       `${SERVER_BASE_URL}/profiles/${pid}`,
       { profile: { ...profile, following: true } },
@@ -50,6 +52,7 @@ const Profile = ({ initialProfile }) => {
   };
 
   const handleUnfollow = async () => {
+    trackButtonClick("unfollow");
     mutate(
       `${SERVER_BASE_URL}/profiles/${pid}`,
       { profile: { ...profile, following: true } },
