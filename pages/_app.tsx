@@ -14,10 +14,14 @@ if (typeof window !== "undefined") {
 }
 
 const MyApp = ({ Component, pageProps }) => {
-  const router = useRouter();
+  const router = useRouter();  
+  // To track the initial render, probably a more elegant way to do this
+  useEffect(() => {
+    trackPageView('/')
+  },[])
+
   useEffect(() => {
     const handleRouteChange = url => {
-      console.log(`handleRouteChange with url ${url} and document.title ${document.title}`);
       trackPageView(url)
     };
     router.events.on('routeChangeComplete', handleRouteChange);
