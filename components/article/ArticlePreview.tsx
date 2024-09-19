@@ -118,7 +118,7 @@ const ArticlePreview = ({ article }) => {
         <ul className="tag-list" style={{ maxWidth: "100%" }}>
           {preview.tagList.map((tag, index) => {
             return (
-              <Link href={`/?tag=${tag}`} as={`/?tag=${tag}`} key={index}>
+              <Link legacyBehavior href={`/?tag=${tag}`} as={`/?tag=${tag}`} key={index}>
                 <li
                   className="tag-default tag-pill tag-outline"
                   onClick={(e) => e.stopPropagation()}

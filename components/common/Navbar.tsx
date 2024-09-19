@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-light">
-      <div className="container">
+      <div className="container" data-testid="check">
         <CustomLink className="navbar-brand" href="/" as="/">
           <span onClick={handleClick}>conduit</span>
         </CustomLink>

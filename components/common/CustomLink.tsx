@@ -9,7 +9,7 @@ interface CustomLinkProps {
 }
 
 const CustomLink = ({ className, href, as, children }: CustomLinkProps) => (
-  <Link href={href} as={as} passHref>
+  <Link legacyBehavior href={href} as={as} passHref>
     <a className={className || ""}>{children}</a>
   </Link>
 );
