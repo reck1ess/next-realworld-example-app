@@ -1,0 +1,31 @@
+import { Metadata } from "next";
+
+import CustomLink from "@/components/common/CustomLink";
+import LoginForm from "@/components/profile/LoginForm";
+
+export const metadata: Metadata = {
+  title: "LOGIN | NEXT REALWORLD",
+  description: "Please login to use fully-featured next-realworld site. (Post articles, comments, and like, follow etc.)"
+}
+
+export default function Login() {
+  return (
+    <div className="auth-page">
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 col-xs-12">
+            <h1 className="text-xs-center">Sign in</h1>
+            <p className="text-xs-center">
+              <CustomLink href="/user/register" as="/user/register">
+                Need an account?
+              </CustomLink>
+            </p>
+            <LoginForm />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  )
+};
+
