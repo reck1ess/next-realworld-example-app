@@ -42,7 +42,8 @@ const ArticleAPI = {
   feed: (page, limit = 10) =>
     axios.get(`${SERVER_BASE_URL}/articles/feed?${getQuery(limit, page)}`),
 
-  get: (slug) => axios.get(`${SERVER_BASE_URL}/articles/${slug}`),
+  get: (slug) =>
+    axios.get(`${SERVER_BASE_URL}/articles/${encodeURIComponent(slug)}`),
 
   unfavorite: (slug) =>
     axios.delete(`${SERVER_BASE_URL}/articles/${slug}/favorite`),

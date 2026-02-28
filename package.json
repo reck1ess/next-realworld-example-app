@@ -8,7 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
     "axios": "^0.19.2",
+    "emotion": "^10.0.27",
+    "emotion-server": "^10.0.27",
     "lazysizes": "^5.2.2",
     "marked": "^1.1.1",
     "next": "^9.5.1",
